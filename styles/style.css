@@ -1,0 +1,93 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+html {
+  font-size: 10px;
+  font-family: Arial, sans-serif;
+}
+div.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  height: 100vh;
+  width: 100vw;
+}
+div.menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  background-color: #6a8c13;
+  color: #cfc;
+  padding: 5px;
+  letter-spacing: 1px;
+}
+div.menu i {
+  font-size: 2.4rem;
+  justify-content: center;
+  text-align: center;
+  border: 3px solid #3f520b;
+  border-radius: 4px;
+  background-color: #3f520b;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+ul.newMenu {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-basis: 70%;
+}
+ul li {
+  list-style: none;
+  font-size: 2.2rem;
+  border: 3px solid #3f520b;
+  border-radius: 4px;
+  justify-content: space-between;
+  padding: 15px 0;
+  line-height: 1.5rem;
+  background-color: #3f520b;
+  flex-wrap: nowrap;
+}
+li.active {
+  padding: 10px 15px;
+}
+div.nameContent h1 {
+  font-size: 3.5rem;
+  color: #cfc;
+  text-shadow: black 1px 1px 5px;
+  margin-top: 20%;
+  text-align: center;
+  font-weight: lighter;
+}
+div.nameContent {
+  background-color: #6a8c13;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: stretch;
+}
+div.nameContent input {
+  background-color: #3f520b;
+  flex-basis: 30%;
+  font-size: 3rem;
+  color: #cfc;
+  text-shadow: black 1px 1px 5px;
+  margin: 20px 20px;
+  cursor: text;
+}
+div.submit {
+  font-size: 3.5rem;
+  color: #cfc;
+  text-shadow: black 1px 1px 5px;
+  text-align: center;
+  border: #3f520b solid 4px;
+  padding: 5px 10px;
+  border-radius: 15px;
+  margin-left: 40%;
+  margin-right: 10%;
+}
