@@ -31,12 +31,113 @@
         </ul>
         <i class="fa-solid fa-angles-right"></i>
       </div>
-      <div class="nameContent">
-        <h1>This masterpiece is named:</h1>
-        <input type="text" placeholder="Dish name" />
-        <div class="submit">
-          Spicy! <i class="fa-solid fa-circle-check"></i>
+      <div class="newDishContent">
+        <div class="nameContent">
+          <h1>This masterpiece is named:</h1>
+          <input type="text" placeholder="Dish name" />
+          <div class="nameSubmit">
+            Spicy! <i class="fa-solid fa-circle-check"></i>
+          </div>
         </div>
+        <div class="ingredientsContent">
+          <h1>Add some mysterious ingredients</h1>
+          <div class="addIngredient">
+            <i class="fa-solid fa-circle-plus"></i>
+            <p class="add">add</p>
+          </div>
+          <div class="ingredientsSubmit">
+            Spicy! <i class="fa-solid fa-circle-check"></i>
+          </div>
+          <div class="ingredientBracket">
+            <div class="ingredientName">
+              <input
+                type="text"
+                placeholder="Ingredient name"
+                class="ingredientName"
+              />
+            </div>
+            <div class="ingredientQuantity">
+              <input
+                type="text"
+                placeholder="Ingredient quantity"
+                class="ingredientQuantity"
+              />
+            </div>
+            <div class="ingredientType">
+              <div class="typeList">
+                <div class="ingredientInput">
+                  <input
+                    type="radio"
+                    name="ingredientType"
+                    class="ingredientType"
+                    value="grams"
+                  />
+                  <p>grams</p>
+                </div>
+                <div class="ingredientInput">
+                  <input
+                    type="radio"
+                    name="ingredientType"
+                    class="ingredientType"
+                    value="milliliters"
+                  />
+                  <p>milliliters</p>
+                </div>
+              </div>
+              <div class="typeList">
+                <div class="ingredientInput">
+                  <input
+                    type="radio"
+                    name="ingredientType"
+                    class="ingredientType"
+                    value="teaspoons"
+                  />
+                  <p>teaspoons</p>
+                </div>
+                <div class="ingredientInput">
+                  <input
+                    type="radio"
+                    name="ingredientType"
+                    class="ingredientType"
+                    value="tablespoons"
+                  />
+                  <p>tablespoons</p>
+                </div>
+              </div>
+              <div class="typeList">
+                <div class="ingredientInput">
+                  <input
+                    type="radio"
+                    name="ingredientType"
+                    class="ingredientType"
+                    value="pieces"
+                  />
+                  <p>pieces</p>
+                </div>
+                <div class="ingredientInput">
+                  <input
+                    type="radio"
+                    name="ingredientType"
+                    class="ingredientType"
+                    value="pinches"
+                  />
+                  <p>pinches</p>
+                </div>
+              </div>
+            </div>
+            <div class="ingredientSubmit">Enjoy your meal!</div>
+          </div>
+        </div>
+        <div class="descriptionContent"></div>
+        <div class="timeContent"></div>
+        <div class="tagsContent"></div>
+        <div class="photoContent"></div>
+      </div>
+    </div>
+    <div class="additionalContainers">
+      <div class="addedIngredient">
+        <p class="added"></p>
+        <i class="fa-duotone fa-circle-minus"></i>
       </div>
     </div>
     <script src="scripts/script.js"></script>
