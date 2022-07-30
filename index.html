@@ -32,9 +32,15 @@
         <i class="fa-solid fa-angles-right"></i>
       </div>
       <div class="newDishContent">
+        <div class="newDishLogo"></div>
         <div class="nameContent">
           <h1>This masterpiece is named:</h1>
-          <input type="text" placeholder="Dish name" />
+          <!-- <input type="text" placeholder="Dish name" /> -->
+          <textarea
+            name="dishName"
+            class="dishName"
+            placeholder="Dish name"
+          ></textarea>
           <div class="nameSubmit">
             Spicy! <i class="fa-solid fa-circle-check"></i>
           </div>
@@ -128,16 +134,90 @@
             <div class="ingredientSubmit">Enjoy your meal!</div>
           </div>
         </div>
-        <div class="descriptionContent"></div>
-        <div class="timeContent"></div>
-        <div class="tagsContent"></div>
-        <div class="photoContent"></div>
-      </div>
-    </div>
-    <div class="additionalContainers">
-      <div class="addedIngredient">
-        <p class="added"></p>
-        <i class="fa-duotone fa-circle-minus"></i>
+        <div class="descriptionContent">
+          <h1>Could you explain how to do that?</h1>
+          <!-- <input
+            type="text"
+            placeholder="Dish manual"
+            class="descriptionInput"
+          /> -->
+          <textarea
+            name="dishDescription"
+            class="dishDescription"
+            placeholder="Dish manual"
+          ></textarea>
+          <div class="descriptionSubmit">
+            Spicy! <i class="fa-solid fa-circle-check"></i>
+          </div>
+        </div>
+        <div class="tagsContent">
+          <div class="tagsLine">
+            <div class="tag">
+              <img src="images/vegan.png" alt="vegan" class="tagImage" />
+              <h1>Vegan</h1>
+            </div>
+            <div class="tag">
+              <img
+                src="images/glutenFree.png"
+                alt="gluten free"
+                class="tagImage"
+              />
+              <h1>Gluten-free</h1>
+            </div>
+          </div>
+          <div class="tagsLine">
+            <div class="tag">
+              <img src="images/spicy.png" alt="spicy" class="tagImage" />
+              <h1>Spicy</h1>
+            </div>
+            <div class="tag">
+              <img src="images/fit.png" alt="fit" class="tagImage" />
+              <h1>Fit</h1>
+            </div>
+          </div>
+          <div class="tagsLine">
+            <div class="tag">
+              <img src="images/easy.png" alt="easy" class="tagImage" />
+              <h1>EZ</h1>
+            </div>
+            <div class="tag">
+              <img src="images/quick.png" alt="quick" class="tagImage" />
+              <h1>Quick</h1>
+            </div>
+          </div>
+          <div class="tagsLine">
+            <div class="tag">
+              <img
+                src="images/commonIngredients.png"
+                alt="few ingredients"
+                class="tagImage"
+              />
+              <h1>Few Ingredients</h1>
+            </div>
+            <div class="tag">
+              <img src="images/meaty.png" alt="meaty" class="tagImage" />
+              <h1>Meaty</h1>
+            </div>
+          </div>
+          <div class="tagsSubmit">
+            Spicy! <i class="fa-solid fa-circle-check"></i>
+          </div>
+        </div>
+        <div class="photoContent">
+          <h1>Wanna add photo?</h1>
+          <input type="file" accept="image/png, image/jpg" class="photoInput" />
+          <div class="photoDisplay"></div>
+
+          <div class="photoSubmit">
+            Spicy! <i class="fa-solid fa-circle-check"></i>
+          </div>
+        </div>
+        <div class="overviewContent">
+          <div class="overviewDishName"><h1></h1></div>
+          <div class="overviewPhotoDisplay"></div>
+          <div class="overviewIngredients"><h1>Ingredients</h1></div>
+          <div class="overviewDescription"></div>
+        </div>
       </div>
     </div>
     <script src="scripts/script.js"></script>

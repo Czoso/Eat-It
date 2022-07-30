@@ -69,6 +69,17 @@ div.newDishContent {
   background-color: #6a8c13;
 }
 /* Name Content */
+div.newDishLogo {
+  position: fixed;
+  background-image: url("../images/logo.jpg");
+  background-size: contain;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  bottom: 10px;
+  left: 10px;
+  width: 100px;
+  height: 100px;
+}
 div.nameContent h1 {
   font-size: 3.5rem;
   color: #cfc;
@@ -86,7 +97,7 @@ div.nameContent {
   padding-top: 51px;
   width: 100vw;
 }
-div.nameContent input {
+div.nameContent textarea {
   background-color: #3f520b;
   flex-basis: 30%;
   font-size: 3rem;
@@ -108,7 +119,7 @@ div.nameContent div.nameSubmit {
 }
 /* Ingredient Content */
 div.ingredientsContent {
-  display: flex;
+  display: none;
   background-color: #6a8c13;
   flex-direction: column;
   flex-grow: 1;
@@ -124,12 +135,14 @@ div.ingredientsContent h1 {
   font-weight: lighter;
 }
 div.addIngredient {
+  background-color: #6a8c13;
   display: flex;
   flex-direction: row;
   border: #3f520b solid 4px;
   border-radius: 50px;
   margin: 10px 5px;
   padding: 5px;
+  z-index: 1;
 }
 i.fa-circle-plus {
   font-size: 8rem;
@@ -154,6 +167,7 @@ div.ingredientBracket {
   margin: 5px 5px 5px 5px;
   border-radius: 50px;
   align-items: center;
+  z-index: 1;
 }
 div.ingredientName {
   margin-top: 20px;
@@ -263,32 +277,195 @@ div.ingredientsSubmit {
 /* Description Content */
 div.descriptionContent {
   display: none;
-  background-color: #6a8;
+  flex-direction: column;
+  background-color: #6a8c13;
   flex-grow: 1;
   padding-top: 51px;
   width: 100vw;
 }
-/* Time Content */
-div.timeContent {
-  display: none;
-  background-color: #6aa;
-  flex-grow: 1;
-  padding-top: 51px;
-  width: 100vw;
+div.descriptionContent h1 {
+  font-size: 3.5rem;
+  color: #cfc;
+  text-shadow: black 1px 1px 5px;
+  margin-top: 5%;
+  text-align: center;
+  font-weight: lighter;
+}
+textarea.dishDescription {
+  background-color: #3f520b;
+  flex-basis: 60%;
+  font-size: 3rem;
+  color: #cfc;
+  text-shadow: black 1px 1px 5px;
+  margin: 20px 20px;
+  cursor: text;
+}
+div.descriptionSubmit {
+  font-size: 3.5rem;
+  color: #cfc;
+  text-shadow: black 1px 1px 5px;
+  text-align: center;
+  border: #3f520b solid 4px;
+  padding: 5px 10px;
+  border-radius: 15px;
+  margin-left: 40%;
+  margin-right: 10%;
 }
 /* Tags Content */
 div.tagsContent {
   display: none;
-  background-color: #613;
+  flex-direction: column;
+  justify-content: space-around;
+  background-color: #6a8c13;
   flex-grow: 1;
   padding-top: 51px;
   width: 100vw;
 }
+div.tagsLine {
+  display: flex;
+}
+div.tag {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  flex-basis: 50%;
+}
+img.tagImage {
+  width: 25vw;
+  height: 25vw;
+  box-shadow: black 1px 1px 5px;
+}
+div.tag h1 {
+  font-size: 2rem;
+  color: #cfc;
+  text-shadow: black 1px 1px 5px;
+  margin-top: 5%;
+  text-align: center;
+  font-weight: lighter;
+  word-wrap: normal;
+}
+div.tagsSubmit {
+  font-size: 3.5rem;
+  color: #cfc;
+  text-shadow: black 1px 1px 5px;
+  text-align: center;
+  border: #3f520b solid 4px;
+  padding: 5px 10px;
+  border-radius: 15px;
+  margin-left: 40%;
+  margin-right: 10%;
+}
 /* Photo Content */
 div.photoContent {
+  display: flex;
+  flex-direction: column;
   display: none;
-  background-color: #c13;
+  background-color: #6a8c13;
   flex-grow: 1;
   padding-top: 51px;
   width: 100vw;
+}
+div.photoContent h1 {
+  font-size: 3.5rem;
+  color: #cfc;
+  text-shadow: black 1px 1px 5px;
+  margin-top: 5%;
+  text-align: center;
+  font-weight: lighter;
+}
+div.photoContent input {
+  font-size: 2.3rem;
+  color: #cfc;
+  text-shadow: black 1px 1px 5px;
+  text-align: center;
+  border: #3f520b solid 4px;
+  padding: 5px 10px;
+  border-radius: 15px;
+  margin: 10px 0;
+}
+div.photoDisplay {
+  border: #3f520b 2px solid;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: calc(100vw - 20px);
+  height: calc(100vw - 20px);
+  margin: 10px;
+}
+div.photoSubmit {
+  font-size: 3.5rem;
+  color: #cfc;
+  text-shadow: black 1px 1px 5px;
+  text-align: center;
+  border: #3f520b solid 4px;
+  padding: 5px 10px;
+  border-radius: 15px;
+  margin-left: 40%;
+  margin-right: 10%;
+}
+/* Overview Content */
+div.overviewContent {
+  display: none;
+  flex-direction: column;
+  background-color: #6a8c13;
+  flex-grow: 1;
+  padding-top: 51px;
+  width: 100vw;
+}
+div.overviewDishName h1 {
+  font-size: 3.5rem;
+  color: #cfc;
+  text-shadow: black 1px 1px 5px;
+  margin-top: 5%;
+  text-align: center;
+  font-weight: lighter;
+}
+div.overviewPhotoDisplay {
+  border: #3f520b 2px solid;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: calc(100vw - 20px);
+  height: calc(100vw - 20px);
+  margin: 10px;
+}
+div.overviewIngredients {
+  border: #3f520b 2px solid;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: calc(100vw - 20px);
+  margin: 10px;
+}
+div.overviewIngredients h1 {
+  font-size: 3.5rem;
+  color: #cfc;
+  text-shadow: black 1px 1px 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+  font-weight: lighter;
+  text-decoration: underline;
+}
+div.overviewIngredient {
+  width: 100%;
+  font-size: 2rem;
+  color: #cfc;
+  text-shadow: black 1px 1px 3px;
+  margin: 5px 5px 0 5px;
+}
+div.overviewDescription {
+  border: #3f520b 2px solid;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: justify;
+  width: calc(100vw - 20px);
+  margin: 10px;
+  padding: 5px;
+  font-size: 2rem;
+  color: #cfc;
+  text-shadow: black 1px 1px 3px;
 }
