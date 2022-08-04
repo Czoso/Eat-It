@@ -205,8 +205,16 @@
         </div>
         <div class="photoContent">
           <h1>Wanna add photo?</h1>
-          <input type="file" accept="image/png, image/jpg" class="photoInput" />
-          <div class="photoDisplay"></div>
+          <input
+            type="file"
+            id="photoInput"
+            accept="image/png, image/jpg"
+            class="photoInput"
+          />
+          <label for="photoInput">
+            <i class="fas fa-upload"></i> &nbsp; Choose A Photo
+          </label>
+          <div class="photoDisplay"><img src="" alt="" class="photo" /></div>
 
           <div class="photoSubmit">
             Spicy! <i class="fa-solid fa-circle-check"></i>
@@ -214,9 +222,33 @@
         </div>
         <div class="overviewContent">
           <div class="overviewDishName"><h1></h1></div>
-          <div class="overviewPhotoDisplay"></div>
+          <div class="overviewTags">
+            <img src="images/vegan.png" alt="vegan" class="overviewTagImage" />
+            <img
+              src="images/glutenFree.png"
+              alt="gluten free"
+              class="overviewTagImage"
+            />
+            <img src="images/spicy.png" alt="spicy" class="overviewTagImage" />
+            <img src="images/fit.png" alt="fit" class="overviewTagImage" />
+            <img src="images/easy.png" alt="easy" class="overviewTagImage" />
+            <img src="images/quick.png" alt="quick" class="overviewTagImage" />
+            <img
+              src="images/commonIngredients.png"
+              alt="few ingredients"
+              class="overviewTagImage"
+            />
+            <img src="images/meaty.png" alt="meaty" class="overviewTagImage" />
+          </div>
+          <div class="overviewPhotoDisplay">
+            <img src="" alt="" class="photo" />
+          </div>
           <div class="overviewIngredients"><h1>Ingredients</h1></div>
           <div class="overviewDescription"></div>
+          <div class="dishSubmit">
+            <i class="fa-solid fa-bowl-food"></i> It is done!
+            <i class="fa-solid fa-bowl-food"></i>
+          </div>
         </div>
       </div>
     </div>

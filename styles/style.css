@@ -242,6 +242,7 @@ div.ingredientSubmit {
 .addedIngredient {
   font-size: 7rem;
   line-height: 80px;
+  align-items: center;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
@@ -251,10 +252,14 @@ div.ingredientSubmit {
   padding: 5px;
 }
 .fa-circle-minus {
+  align-items: center;
+  justify-content: center;
   font-size: 8rem;
   color: #3f520b;
 }
 p.addedIngredientName {
+  line-height: 40px;
+  padding: 20px 0;
   font-size: 4rem;
   color: #cfc;
   font-style: italic;
@@ -360,6 +365,7 @@ div.photoContent {
   display: flex;
   flex-direction: column;
   display: none;
+  align-items: center;
   background-color: #6a8c13;
   flex-grow: 1;
   padding-top: 51px;
@@ -374,24 +380,34 @@ div.photoContent h1 {
   font-weight: lighter;
 }
 div.photoContent input {
-  font-size: 2.3rem;
+  display: none;
+}
+label {
+  font-size: 3rem;
   color: #cfc;
   text-shadow: black 1px 1px 5px;
   text-align: center;
+
   border: #3f520b solid 4px;
-  padding: 5px 10px;
+  padding: 10px 20px;
   border-radius: 15px;
   margin: 10px 0;
 }
 div.photoDisplay {
-  border: #3f520b 2px solid;
-  background-position: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  width: calc(100vw - 20px);
-  height: calc(100vw - 20px);
+  display: none;
+  max-width: calc(100vw - 20px);
+  max-height: calc(100vw - 20px);
   margin: 10px;
 }
+img.photo {
+  display: block;
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+  border: #3f520b 2px solid;
+}
+
 div.photoSubmit {
   font-size: 3.5rem;
   color: #cfc;
@@ -420,19 +436,29 @@ div.overviewDishName h1 {
   text-align: center;
   font-weight: lighter;
 }
+div.overviewTags {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 10px 0;
+}
+img.overviewTagImage {
+  display: none;
+  /* border: #3f520b 2px solid; */
+  width: 12vw;
+  height: 12vw;
+  padding: 1px;
+}
 div.overviewPhotoDisplay {
-  border: #3f520b 2px solid;
-  background-position: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  width: calc(100vw - 20px);
-  height: calc(100vw - 20px);
+  display: none;
+  max-width: calc(100vw - 20px);
+  max-height: calc(100vw - 20px);
   margin: 10px;
 }
 div.overviewIngredients {
+  display: none;
   border: #3f520b 2px solid;
   border-radius: 15px;
-  display: flex;
   flex-direction: column;
   justify-content: flex-start;
   width: calc(100vw - 20px);
@@ -447,6 +473,7 @@ div.overviewIngredients h1 {
   text-align: center;
   font-weight: lighter;
   text-decoration: underline;
+  padding-bottom: 10px;
 }
 div.overviewIngredient {
   width: 100%;
@@ -458,14 +485,32 @@ div.overviewIngredient {
 div.overviewDescription {
   border: #3f520b 2px solid;
   border-radius: 15px;
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: flex-start;
   text-align: justify;
   width: calc(100vw - 20px);
   margin: 10px;
-  padding: 5px;
+  padding: 10px 5px;
   font-size: 2rem;
   color: #cfc;
   text-shadow: black 1px 1px 3px;
+}
+div.dishSubmit i {
+  padding: 0 5px;
+  font-size: 2.5rem;
+  color: #cfc;
+}
+div.dishSubmit {
+  display: none;
+  font-size: 3rem;
+  color: #cfc;
+  text-shadow: black 1px 1px 5px;
+  text-align: center;
+  border: #3f520b solid 4px;
+  padding: 5px 10px;
+  border-radius: 15px;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 5%;
 }

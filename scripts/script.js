@@ -26,29 +26,36 @@ const ingredientsSubmitButton = document.querySelector("div.ingredientsSubmit");
 const descriptionSubmitButton = document.querySelector("div.descriptionSubmit");
 const descriptionInput = document.querySelector("textarea.dishDescription");
 const tagsSubmitButton = document.querySelector("div.tagsSubmit");
-const tagsImage = document.querySelectorAll("img.tagImage");
+const tagsImage = Array.from(document.querySelectorAll("img.tagImage"));
 const photoInput = document.querySelector("input.photoInput");
 const displayedImageBracket = document.querySelector("div.photoDisplay");
+const dishPhotos = document.querySelectorAll("img.photo");
 const photoSubmitButton = document.querySelector("div.photoSubmit");
 const overviewDishName = document.querySelector("div.overviewDishName h1");
+const overviewTagImage = document.querySelectorAll("img.overviewTagImage");
 const overviewPhotoDisplay = document.querySelector("div.overviewPhotoDisplay");
 const overviewIngredientsList = document.querySelector(
   "div.overviewIngredients"
 );
 const overviewDescription = document.querySelector("div.overviewDescription");
+const dishSubmitButton = document.querySelector("div.dishSubmit");
 
 let deleteButtons;
 let deletedIngredient;
-let dishName = "missing dish name";
-let dishIngredients = "missing dish ingredients";
-let dishDescription = "missing dish description";
+let dishName = "";
+let dishIngredients = "";
+let dishDescription = "";
 let ingredientName;
 let ingredientQuantity;
 let ingredientType;
-let uploadedImage;
+let uploadedImage = "";
 let tags = [];
 const activatedTags = [];
 const animationDuration = 200;
+const capitalizeFirstLetter = (string) => {
+  const firstLetter = string[0].toUpperCase();
+  return firstLetter + string.slice(1);
+};
 // Menu
 const menuContent = [
   "Name",
@@ -133,7 +140,6 @@ const changingMenu = function (direction) {
       navi[activeMenuIndex - 1].classList.toggle("active");
       navi[activeMenuIndex - 1].animate(changingNextMenu, changingMenuTiming);
       newDishContent.style.animationFillMode = "forwards";
-      console.log(activeMenuIndex);
       setTimeout(() => {
         changingNewDishContent(activeMenuIndex + 1);
         newDishContent.style.animationFillMode = "none";
@@ -143,7 +149,6 @@ const changingMenu = function (direction) {
     }
   }
   navi.forEach(indexCheck);
-  console.log(activeMenuIndex);
   if (activeMenuIndex == 5) {
     newDishLogo.style.display = "none";
   } else {
@@ -165,9 +170,10 @@ nameSubmitButton.addEventListener("click", () => {
   } else {
     changingMenu("next");
     dishName = nameInput.value;
-    overviewDishName.textContent = dishName;
+    overviewDishName.textContent = capitalizeFirstLetter(dishName);
     nameInput.style.boxShadow = "none";
   }
+  overviewSubmitDisplay();
 });
 // Ingredients
 const inputTypeCheck = function (element) {
@@ -193,7 +199,7 @@ const ingredientsDisplay = function (element, index) {
   const addedIngredientName = document.createElement("p");
   addedIngredient.appendChild(addedIngredientName);
   addedIngredientName.classList.add("addedIngredientName");
-  addedIngredientName.textContent = element.name;
+  addedIngredientName.textContent = capitalizeFirstLetter(element.name);
   const ingredientTypeName = element.type;
   const ingredientTypeMarker = function (element) {
     if (element.value == ingredientTypeName) {
@@ -201,7 +207,7 @@ const ingredientsDisplay = function (element, index) {
     }
   };
   addedIngredientName.addEventListener("click", () => {
-    ingredientBracketAppear;
+    ingredientBracketAppear();
     ingredientNameInput.value = ingredients[index].name;
     ingredientQuantityInput.value = ingredients[index].quantity;
     ingredientTypeInput.forEach(ingredientTypeMarker);
@@ -214,14 +220,11 @@ const ingredientsDisplay = function (element, index) {
     "fa-circle-minus",
     `ingredient${index}`
   );
-
   deleteButtons = [];
   deleteButtons = Array.from(document.querySelectorAll("i.fa-circle-minus"));
-  // deleteButtons.forEach(removeEventListener("click", deleteIngredient));
   deleteButtons.forEach(deleteButtonFunction);
 };
 const deleteIngredient = function () {
-  // console.log(deleteButtons.indexOf(this));
   const deleteIndex = deleteButtons.indexOf(this);
   ingredients.splice(deleteIndex, 1);
   ingredientsUpdate();
@@ -255,9 +258,7 @@ const ingredientTypeMarkChecked = function (element) {
 const setToNotChecked = function (element) {
   element.checked = false;
 };
-addIngredient.addEventListener("click", () => {
-  ingredientBracketAppear();
-});
+addIngredient.addEventListener("click", ingredientBracketAppear);
 ingredientSubmit.addEventListener("click", () => {
   let ingredientTypeCheck = false;
   const ingredientTypeMarkCheck = function (element) {
@@ -278,14 +279,13 @@ ingredientSubmit.addEventListener("click", () => {
     ingredientNameInput.style.boxShadow = "none";
     ingredientTypeName.forEach(ingredientTypeMarkNotChecked);
   } else {
-    console.log(ingredientTypeCheck);
     ingredientTypeInput.forEach(inputTypeCheck);
     ingredientName = ingredientNameInput.value;
     ingredientQuantity = ingredientQuantityInput.value;
     const newIngredient = new ingredient(
-      ingredientName,
+      capitalizeFirstLetter(ingredientName),
       ingredientQuantity,
-      ingredientType
+      capitalizeFirstLetter(ingredientType)
     );
     ingredients.push(newIngredient);
     setTimeout(() => {
@@ -307,14 +307,32 @@ ingredientSubmit.addEventListener("click", () => {
 });
 ingredientsSubmitButton.addEventListener("click", () => {
   changingMenu("next");
+  overviewSubmitDisplay();
   dishIngredients = ingredients;
   dishIngredients.forEach(ingredientsOverviewDisplay);
+  if (ingredients.length > 0) {
+    overviewIngredientsList.style.display = "flex";
+    console.log("block");
+  } else {
+    overviewIngredientsList.style.display = "none";
+    console.log("none");
+  }
 });
 //Description
 descriptionSubmitButton.addEventListener("click", () => {
-  changingMenu("next");
-  dishDescription = descriptionInput.value;
-  overviewDescription.textContent = dishDescription;
+  if (descriptionInput.value == "") {
+    descriptionInput.style.boxShadow = "red 0 0 5px";
+    descriptionInput.placeholder =
+      "Enter dish description before next step please";
+    overviewDescription.style.display = "none";
+  } else {
+    changingMenu("next");
+    dishDescription = descriptionInput.value;
+    overviewDescription.textContent = capitalizeFirstLetter(dishDescription);
+    descriptionInput.style.boxShadow = "none";
+    overviewDescription.style.display = "flex";
+  }
+  overviewSubmitDisplay();
 });
 //Tags
 const activeTag = [
@@ -325,27 +343,39 @@ const inactiveTag = [
   { boxShadow: "#cfc 2px 2px 10px" },
   { boxShadow: "black 1px 1px 5px" },
 ];
-const clickedTag = function () {
-  this.classList.toggle("active");
-  if (this.classList.contains("active")) {
-    this.animate(activeTag, animationDuration);
-    setTimeout(() => {
-      this.style.boxShadow = "#cfc 2px 2px 10px";
-    }, animationDuration);
-  } else {
-    this.animate(inactiveTag, animationDuration);
-    console.log("nie ma active");
-    console.log(this);
 
-    setTimeout(() => {
-      this.style.boxShadow = "black 1px 1px 5px";
-    }, animationDuration);
-  }
-};
-const tagEvent = function (element) {
+tagsImage.forEach((element) => {
+  const setDisplayed = (tag, index) => {
+    if (index === tagsImage.indexOf(element)) {
+      console.log("Displayed");
+      tag.style.display = "block";
+    }
+  };
+  const setNotDisplayed = (tag, index) => {
+    if (index === tagsImage.indexOf(element)) {
+      console.log("notDisplayed");
+      tag.style.display = "none";
+    }
+  };
+  const clickedTag = function () {
+    this.classList.toggle("active");
+    if (this.classList.contains("active")) {
+      overviewTagImage.forEach(setDisplayed);
+      this.animate(activeTag, animationDuration);
+      setTimeout(() => {
+        this.style.boxShadow = "#cfc 2px 2px 10px";
+      }, animationDuration);
+    } else {
+      overviewTagImage.forEach(setNotDisplayed);
+      this.animate(inactiveTag, animationDuration);
+
+      setTimeout(() => {
+        this.style.boxShadow = "black 1px 1px 5px";
+      }, animationDuration);
+    }
+  };
   element.addEventListener("click", clickedTag);
-};
-tagsImage.forEach(tagEvent);
+});
 const tagActiveCheck = function (element) {
   if (element.classList.contains("active")) {
     activatedTags.push(element);
@@ -359,21 +389,44 @@ tagsSubmitButton.addEventListener("click", () => {
   tagsImage.forEach(tagActiveCheck);
   tags = activatedTags;
   changingMenu("next");
+  overviewSubmitDisplay();
 });
 //photo
 photoInput.addEventListener("change", function () {
   const reader = new FileReader();
   reader.addEventListener("load", () => {
     uploadedImage = reader.result;
-    displayedImageBracket.style.backgroundImage = `url(${uploadedImage})`;
+    displayedPhoto = new Image();
+
+    dishPhotos.forEach((element) => {
+      element.setAttribute("src", reader.result);
+    });
+    displayedImageBracket.style.display = "inline-flex";
+    overviewPhotoDisplay.style.display = "inline-flex";
   });
   reader.readAsDataURL(this.files[0]);
 });
+
 photoSubmitButton.addEventListener("click", () => {
-  overviewPhotoDisplay.style.backgroundImage = `url(${uploadedImage})`;
+  if (uploadedImage) {
+    overviewPhotoDisplay.style.backgroundImage = `url(${uploadedImage})`;
+    changingMenu("next");
+  }
   changingMenu("next");
+  overviewSubmitDisplay();
 });
 //overview
+const overviewSubmitDisplay = () => {
+  if (!dishName) {
+    dishSubmitButton.style.display = "none";
+  } else if (!dishDescription) {
+    dishSubmitButton.style.display = "none";
+  } else if (ingredients.length < 1) {
+    dishSubmitButton.style.display = "none";
+  } else {
+    dishSubmitButton.style.display = "block";
+  }
+};
 const ingredientsOverviewDisplay = function (element, index) {
   const overviewIngredient = document.createElement("div");
   overviewIngredient.classList.add("overviewIngredient");
