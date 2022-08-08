@@ -13,241 +13,311 @@
   </head>
   <body>
     <div class="wrapper">
-      <div class="menu">
-        <i class="fa-solid fa-angles-left"></i>
-        <ul class="newMenu">
-          <!-- <li>Name</li>
+      <div class="mainMenu">
+        <div class="mainMenuLogo">
+          <img src="images/logoNew.png" alt="Logo" class="mainMenuLogo" />
+        </div>
+        <div class="mainMenuLine">
+          <div class="mainMenuButton yourDishesButton">
+            <div class="mainMenuButtonImage">
+              <img
+                src="images/dish.png"
+                alt="dish"
+                class="mainMenuButtonImage"
+              />
+            </div>
+            <div class="mainMenuButtonText">Your dishes</div>
+          </div>
+          <div class="mainMenuButton newDishButton">
+            <div class="mainMenuButtonImage">
+              <img
+                src="images/addDish.png"
+                alt="add dish"
+                class="mainMenuButtonImage"
+              />
+            </div>
+            <div class="mainMenuButtonText">New dish</div>
+          </div>
+        </div>
+        <div class="mainMenuLine">
+          <div class="mainMenuButton browserButton">
+            <div class="mainMenuButtonImage">
+              <img
+                src="images/browse.png"
+                alt="browser"
+                class="mainMenuButtonImage"
+              />
+            </div>
+            <div class="mainMenuButtonText">Browser</div>
+          </div>
+          <div class="mainMenuButton settingsButton">
+            <div class="mainMenuButtonImage">
+              <img
+                src="images/settings.png"
+                alt="settings"
+                class="mainMenuButtonImage"
+              />
+            </div>
+            <div class="mainMenuButtonText">settings</div>
+          </div>
+        </div>
+      </div>
+      <div class="newDish">
+        <div class="menu">
+          <i class="fa-solid fa-angles-left"></i>
+          <ul class="newMenu">
+            <!-- <li>Name</li>
             <li>Ingredients</li>
             <li>Description</li>
             <li>Prepare Time</li>
             <li>Tags</li>
             <li>Photo</li> -->
-          <li class="active">Name</li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-        </ul>
-        <i class="fa-solid fa-angles-right"></i>
-      </div>
-      <div class="newDishContent">
-        <div class="newDishLogo"></div>
-        <div class="nameContent">
-          <h1>This masterpiece is named:</h1>
-          <!-- <input type="text" placeholder="Dish name" /> -->
-          <textarea
-            name="dishName"
-            class="dishName"
-            placeholder="Dish name"
-          ></textarea>
-          <div class="nameSubmit">
-            Spicy! <i class="fa-solid fa-circle-check"></i>
-          </div>
+            <li class="active">Name</li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+          </ul>
+          <i class="fa-solid fa-angles-right"></i>
         </div>
-        <div class="ingredientsContent">
-          <h1>Add some mysterious ingredients</h1>
-          <div class="addIngredient">
-            <i class="fa-solid fa-circle-plus"></i>
-            <p class="add">add</p>
-          </div>
-          <div class="ingredientsSubmit">
-            Spicy! <i class="fa-solid fa-circle-check"></i>
-          </div>
-          <div class="ingredientBracket">
-            <div class="ingredientName">
-              <input
-                type="text"
-                placeholder="Ingredient name"
-                class="ingredientName"
-              />
+        <div class="newDishContent">
+          <div class="newDishLogo"></div>
+          <div class="nameContent">
+            <h1>This masterpiece is named:</h1>
+            <!-- <input type="text" placeholder="Dish name" /> -->
+            <textarea
+              name="dishName"
+              class="dishName"
+              placeholder="Dish name"
+            ></textarea>
+            <div class="nameSubmit">
+              Spicy! <i class="fa-solid fa-circle-check"></i>
             </div>
-            <div class="ingredientQuantity">
-              <input
-                type="text"
-                placeholder="Ingredient quantity"
-                class="ingredientQuantity"
-              />
+            <div class="newDishExitButton">
+              <img src="images/exit.png" alt="EXIT" class="newDishExitImage" />
             </div>
-            <div class="ingredientType">
-              <div class="typeList">
-                <div class="ingredientInput">
-                  <input
-                    type="radio"
-                    name="ingredientType"
-                    class="ingredientType"
-                    value="grams"
-                  />
-                  <p>grams</p>
+          </div>
+          <div class="ingredientsContent">
+            <h1>Add some mysterious ingredients</h1>
+            <div class="addIngredient">
+              <i class="fa-solid fa-circle-plus"></i>
+              <p class="add">add</p>
+            </div>
+            <div class="ingredientsSubmit">
+              Spicy! <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div class="ingredientBracket">
+              <div class="ingredientName">
+                <input
+                  type="text"
+                  placeholder="Ingredient name"
+                  class="ingredientName"
+                />
+              </div>
+              <div class="ingredientQuantity">
+                <input
+                  type="text"
+                  placeholder="Ingredient quantity"
+                  class="ingredientQuantity"
+                />
+              </div>
+              <div class="ingredientType">
+                <div class="typeList">
+                  <div class="ingredientInput">
+                    <input
+                      type="radio"
+                      name="ingredientType"
+                      class="ingredientType"
+                      value="grams"
+                    />
+                    <p>grams</p>
+                  </div>
+                  <div class="ingredientInput">
+                    <input
+                      type="radio"
+                      name="ingredientType"
+                      class="ingredientType"
+                      value="milliliters"
+                    />
+                    <p>milliliters</p>
+                  </div>
                 </div>
-                <div class="ingredientInput">
-                  <input
-                    type="radio"
-                    name="ingredientType"
-                    class="ingredientType"
-                    value="milliliters"
-                  />
-                  <p>milliliters</p>
+                <div class="typeList">
+                  <div class="ingredientInput">
+                    <input
+                      type="radio"
+                      name="ingredientType"
+                      class="ingredientType"
+                      value="teaspoons"
+                    />
+                    <p>teaspoons</p>
+                  </div>
+                  <div class="ingredientInput">
+                    <input
+                      type="radio"
+                      name="ingredientType"
+                      class="ingredientType"
+                      value="tablespoons"
+                    />
+                    <p>tablespoons</p>
+                  </div>
+                </div>
+                <div class="typeList">
+                  <div class="ingredientInput">
+                    <input
+                      type="radio"
+                      name="ingredientType"
+                      class="ingredientType"
+                      value="pieces"
+                    />
+                    <p>pieces</p>
+                  </div>
+                  <div class="ingredientInput">
+                    <input
+                      type="radio"
+                      name="ingredientType"
+                      class="ingredientType"
+                      value="pinches"
+                    />
+                    <p>pinches</p>
+                  </div>
                 </div>
               </div>
-              <div class="typeList">
-                <div class="ingredientInput">
-                  <input
-                    type="radio"
-                    name="ingredientType"
-                    class="ingredientType"
-                    value="teaspoons"
-                  />
-                  <p>teaspoons</p>
-                </div>
-                <div class="ingredientInput">
-                  <input
-                    type="radio"
-                    name="ingredientType"
-                    class="ingredientType"
-                    value="tablespoons"
-                  />
-                  <p>tablespoons</p>
-                </div>
-              </div>
-              <div class="typeList">
-                <div class="ingredientInput">
-                  <input
-                    type="radio"
-                    name="ingredientType"
-                    class="ingredientType"
-                    value="pieces"
-                  />
-                  <p>pieces</p>
-                </div>
-                <div class="ingredientInput">
-                  <input
-                    type="radio"
-                    name="ingredientType"
-                    class="ingredientType"
-                    value="pinches"
-                  />
-                  <p>pinches</p>
-                </div>
-              </div>
+              <div class="ingredientSubmit">Enjoy your meal!</div>
             </div>
-            <div class="ingredientSubmit">Enjoy your meal!</div>
           </div>
-        </div>
-        <div class="descriptionContent">
-          <h1>Could you explain how to do that?</h1>
-          <!-- <input
+          <div class="descriptionContent">
+            <h1>Could you explain how to do that?</h1>
+            <!-- <input
             type="text"
             placeholder="Dish manual"
             class="descriptionInput"
           /> -->
-          <textarea
-            name="dishDescription"
-            class="dishDescription"
-            placeholder="Dish manual"
-          ></textarea>
-          <div class="descriptionSubmit">
-            Spicy! <i class="fa-solid fa-circle-check"></i>
-          </div>
-        </div>
-        <div class="tagsContent">
-          <div class="tagsLine">
-            <div class="tag">
-              <img src="images/vegan.png" alt="vegan" class="tagImage" />
-              <h1>Vegan</h1>
+            <textarea
+              name="dishDescription"
+              class="dishDescription"
+              placeholder="Dish manual"
+            ></textarea>
+            <div class="descriptionSubmit">
+              Spicy! <i class="fa-solid fa-circle-check"></i>
             </div>
-            <div class="tag">
+          </div>
+          <div class="tagsContent">
+            <div class="tagsLine">
+              <div class="tag">
+                <img src="images/vegan.png" alt="vegan" class="tagImage" />
+                <h1>Vegan</h1>
+              </div>
+              <div class="tag">
+                <img
+                  src="images/glutenFree.png"
+                  alt="gluten free"
+                  class="tagImage"
+                />
+                <h1>Gluten-free</h1>
+              </div>
+            </div>
+            <div class="tagsLine">
+              <div class="tag">
+                <img src="images/spicy.png" alt="spicy" class="tagImage" />
+                <h1>Spicy</h1>
+              </div>
+              <div class="tag">
+                <img src="images/fit.png" alt="fit" class="tagImage" />
+                <h1>Fit</h1>
+              </div>
+            </div>
+            <div class="tagsLine">
+              <div class="tag">
+                <img src="images/easy.png" alt="easy" class="tagImage" />
+                <h1>EZ</h1>
+              </div>
+              <div class="tag">
+                <img src="images/quick.png" alt="quick" class="tagImage" />
+                <h1>Quick</h1>
+              </div>
+            </div>
+            <div class="tagsLine">
+              <div class="tag">
+                <img
+                  src="images/commonIngredients.png"
+                  alt="few ingredients"
+                  class="tagImage"
+                />
+                <h1>Few Ingredients</h1>
+              </div>
+              <div class="tag">
+                <img src="images/meaty.png" alt="meaty" class="tagImage" />
+                <h1>Meaty</h1>
+              </div>
+            </div>
+            <div class="tagsSubmit">
+              Spicy! <i class="fa-solid fa-circle-check"></i>
+            </div>
+          </div>
+          <div class="photoContent">
+            <h1>Wanna add photo?</h1>
+            <input
+              type="file"
+              id="photoInput"
+              accept="image/png, image/jpg"
+              class="photoInput"
+            />
+            <label for="photoInput">
+              <i class="fas fa-upload"></i> &nbsp; Choose A Photo
+            </label>
+            <div class="photoDisplay"><img src="" alt="" class="photo" /></div>
+
+            <div class="photoSubmit">
+              Spicy! <i class="fa-solid fa-circle-check"></i>
+            </div>
+          </div>
+          <div class="overviewContent">
+            <div class="overviewDishName"><h1></h1></div>
+            <div class="overviewTags">
+              <img
+                src="images/vegan.png"
+                alt="vegan"
+                class="overviewTagImage"
+              />
               <img
                 src="images/glutenFree.png"
                 alt="gluten free"
-                class="tagImage"
+                class="overviewTagImage"
               />
-              <h1>Gluten-free</h1>
-            </div>
-          </div>
-          <div class="tagsLine">
-            <div class="tag">
-              <img src="images/spicy.png" alt="spicy" class="tagImage" />
-              <h1>Spicy</h1>
-            </div>
-            <div class="tag">
-              <img src="images/fit.png" alt="fit" class="tagImage" />
-              <h1>Fit</h1>
-            </div>
-          </div>
-          <div class="tagsLine">
-            <div class="tag">
-              <img src="images/easy.png" alt="easy" class="tagImage" />
-              <h1>EZ</h1>
-            </div>
-            <div class="tag">
-              <img src="images/quick.png" alt="quick" class="tagImage" />
-              <h1>Quick</h1>
-            </div>
-          </div>
-          <div class="tagsLine">
-            <div class="tag">
+              <img
+                src="images/spicy.png"
+                alt="spicy"
+                class="overviewTagImage"
+              />
+              <img src="images/fit.png" alt="fit" class="overviewTagImage" />
+              <img src="images/easy.png" alt="easy" class="overviewTagImage" />
+              <img
+                src="images/quick.png"
+                alt="quick"
+                class="overviewTagImage"
+              />
               <img
                 src="images/commonIngredients.png"
                 alt="few ingredients"
-                class="tagImage"
+                class="overviewTagImage"
               />
-              <h1>Few Ingredients</h1>
+              <img
+                src="images/meaty.png"
+                alt="meaty"
+                class="overviewTagImage"
+              />
             </div>
-            <div class="tag">
-              <img src="images/meaty.png" alt="meaty" class="tagImage" />
-              <h1>Meaty</h1>
+            <div class="overviewPhotoDisplay">
+              <img src="" alt="" class="photo" />
             </div>
-          </div>
-          <div class="tagsSubmit">
-            Spicy! <i class="fa-solid fa-circle-check"></i>
-          </div>
-        </div>
-        <div class="photoContent">
-          <h1>Wanna add photo?</h1>
-          <input
-            type="file"
-            id="photoInput"
-            accept="image/png, image/jpg"
-            class="photoInput"
-          />
-          <label for="photoInput">
-            <i class="fas fa-upload"></i> &nbsp; Choose A Photo
-          </label>
-          <div class="photoDisplay"><img src="" alt="" class="photo" /></div>
-
-          <div class="photoSubmit">
-            Spicy! <i class="fa-solid fa-circle-check"></i>
-          </div>
-        </div>
-        <div class="overviewContent">
-          <div class="overviewDishName"><h1></h1></div>
-          <div class="overviewTags">
-            <img src="images/vegan.png" alt="vegan" class="overviewTagImage" />
-            <img
-              src="images/glutenFree.png"
-              alt="gluten free"
-              class="overviewTagImage"
-            />
-            <img src="images/spicy.png" alt="spicy" class="overviewTagImage" />
-            <img src="images/fit.png" alt="fit" class="overviewTagImage" />
-            <img src="images/easy.png" alt="easy" class="overviewTagImage" />
-            <img src="images/quick.png" alt="quick" class="overviewTagImage" />
-            <img
-              src="images/commonIngredients.png"
-              alt="few ingredients"
-              class="overviewTagImage"
-            />
-            <img src="images/meaty.png" alt="meaty" class="overviewTagImage" />
-          </div>
-          <div class="overviewPhotoDisplay">
-            <img src="" alt="" class="photo" />
-          </div>
-          <div class="overviewIngredients"><h1>Ingredients</h1></div>
-          <div class="overviewDescription"></div>
-          <div class="dishSubmit">
-            <i class="fa-solid fa-bowl-food"></i> It is done!
-            <i class="fa-solid fa-bowl-food"></i>
+            <div class="overviewIngredients"><h1>Ingredients</h1></div>
+            <div class="overviewDescription"></div>
+            <div class="dishSubmit">
+              <i class="fa-solid fa-bowl-food"></i> It is done!
+              <i class="fa-solid fa-bowl-food"></i>
+            </div>
           </div>
         </div>
       </div>

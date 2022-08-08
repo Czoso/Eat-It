@@ -1,3 +1,37 @@
+// MAIN MENU
+// MAIN MENU
+// MAIN MENU
+const mainMenu = document.querySelector("div.mainMenu");
+const newDishButton = document.querySelector("div.newDishButton");
+const newDish = document.querySelector("div.newDish");
+const mainMenuDisappear = [
+  { transform: "translateY(0)", opacity: "100%" },
+  { transform: "translateY(20px)", opacity: "0" },
+];
+const mainMenuAppear = [
+  { transform: "translateY(20px)", opacity: "0" },
+  { transform: "translateY(0)", opacity: "100%" },
+];
+const disappearing = (content) => {
+  content.animate(mainMenuDisappear, animationDuration);
+  setTimeout(() => {
+    content.style.display = "none";
+  }, animationDuration);
+};
+const appearing = (content) => {
+  setTimeout(() => {
+    content.style.display = "flex";
+    content.animate(mainMenuAppear, animationDuration);
+  }, animationDuration);
+};
+newDishButton.addEventListener("click", () => {
+  disappearing(mainMenu);
+  appearing(newDish);
+});
+// NEW DISH
+// NEW DISH
+// NEW DISH
+const newDishExitButton = document.querySelector("div.newDishExitButton");
 const newDishLogo = document.querySelector("div.newDishLogo");
 const previousPage = document.querySelector(".fa-angles-left");
 const nextPage = document.querySelector(".fa-angles-right");
@@ -56,6 +90,7 @@ const capitalizeFirstLetter = (string) => {
   const firstLetter = string[0].toUpperCase();
   return firstLetter + string.slice(1);
 };
+
 // Menu
 const menuContent = [
   "Name",
@@ -113,7 +148,6 @@ const changingNewDishContent = function (index) {
   newRecipeContent[index].style.display = "none";
 };
 const changingMenu = function (direction) {
-  // navi.forEach(indexCheck);
   if (direction == "next") {
     if (activeMenuIndex < 5) {
       navi[activeMenuIndex].textContent = " ";
@@ -174,6 +208,33 @@ nameSubmitButton.addEventListener("click", () => {
     nameInput.style.boxShadow = "none";
   }
   overviewSubmitDisplay();
+});
+newDishExitButton.addEventListener("click", () => {
+  const disactivateTags = (element, index) => {
+    if (element.classList.contains("active")) {
+      element.classList.toggle("active");
+      element.style.boxShadow = "black 1px 1px 5px";
+      overviewTagImage[index].style.display = "none";
+    }
+  };
+  disappearing(newDish);
+  appearing(mainMenu);
+  dishName = "";
+  dishIngredients = "";
+  nameInput.value = "";
+  ingredients.splice(0, ingredients.length);
+  ingredientsUpdate();
+  ingredientsOverviewDelete();
+  descriptionInput.value = "";
+  dishDescription = "";
+  tagsImage.forEach(disactivateTags);
+  overviewIngredientsList.style.display = "none";
+  overviewDishName.textContent = "";
+  overviewDescription.textContent = "";
+  overviewDescription.style.display = "none";
+  dishSubmitButton.style.display = "none";
+  displayedImageBracket.style.display = "none";
+  overviewPhotoDisplay.style.display = "none";
 });
 // Ingredients
 const inputTypeCheck = function (element) {
@@ -307,15 +368,15 @@ ingredientSubmit.addEventListener("click", () => {
 });
 ingredientsSubmitButton.addEventListener("click", () => {
   changingMenu("next");
+  ingredientsOverviewDelete();
   overviewSubmitDisplay();
   dishIngredients = ingredients;
   dishIngredients.forEach(ingredientsOverviewDisplay);
+
   if (ingredients.length > 0) {
     overviewIngredientsList.style.display = "flex";
-    console.log("block");
   } else {
     overviewIngredientsList.style.display = "none";
-    console.log("none");
   }
 });
 //Description
@@ -337,23 +398,21 @@ descriptionSubmitButton.addEventListener("click", () => {
 //Tags
 const activeTag = [
   { boxShadow: "black 1px 1px 5px" },
-  { boxShadow: "#cfc 2px 2px 10px" },
+  { boxShadow: "#bb2 2px 2px 10px" },
 ];
 const inactiveTag = [
-  { boxShadow: "#cfc 2px 2px 10px" },
+  { boxShadow: "#bb2 2px 2px 10px" },
   { boxShadow: "black 1px 1px 5px" },
 ];
 
 tagsImage.forEach((element) => {
   const setDisplayed = (tag, index) => {
     if (index === tagsImage.indexOf(element)) {
-      console.log("Displayed");
       tag.style.display = "block";
     }
   };
   const setNotDisplayed = (tag, index) => {
     if (index === tagsImage.indexOf(element)) {
-      console.log("notDisplayed");
       tag.style.display = "none";
     }
   };
@@ -363,7 +422,7 @@ tagsImage.forEach((element) => {
       overviewTagImage.forEach(setDisplayed);
       this.animate(activeTag, animationDuration);
       setTimeout(() => {
-        this.style.boxShadow = "#cfc 2px 2px 10px";
+        this.style.boxShadow = "#bb2 2px 2px 10px";
       }, animationDuration);
     } else {
       overviewTagImage.forEach(setNotDisplayed);
@@ -382,10 +441,10 @@ const tagActiveCheck = function (element) {
   }
 };
 const tagClearFunction = function (element, index, array) {
-  array.remove(element);
+  array.splice(index, 1);
 };
 tagsSubmitButton.addEventListener("click", () => {
-  activatedTags.forEach(tagClearFunction);
+  activatedTags.splice(0, activatedTags.length);
   tagsImage.forEach(tagActiveCheck);
   tags = activatedTags;
   changingMenu("next");
@@ -426,6 +485,19 @@ const overviewSubmitDisplay = () => {
   } else {
     dishSubmitButton.style.display = "block";
   }
+};
+const ingredientsOverviewDelete = () => {
+  const ingredientsToDelete = Array.from(
+    document.querySelectorAll("div.overviewIngredient")
+  );
+  let deleteCounter = 0;
+  ingredientsToDelete.forEach((element) => {
+    if (element.classList.contains("overviewIngredient")) {
+      element.remove();
+    } else {
+      deleteCounter++;
+    }
+  });
 };
 const ingredientsOverviewDisplay = function (element, index) {
   const overviewIngredient = document.createElement("div");
