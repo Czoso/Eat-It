@@ -1,3 +1,63 @@
+// LOGIN
+const signinContent = document.querySelector("div.signinContent");
+const loginContent = document.querySelector("div.loginContent");
+const signinSubmitButton = document.querySelector("div.signinSubmitButton");
+const signinChangeButton = document.querySelector("div.signinChangeButton");
+const loginSubmitButton = document.querySelector("div.loginSubmitButton");
+const loginChangeButton = document.querySelector("div.loginChangeButton");
+const windowContent = document.querySelector("div.windowContent");
+const continueButtons = Array.from(
+  document.querySelectorAll("div.continueButton")
+);
+const loginBlur = document.querySelector("div.loginBlur");
+const changingLoginWindow = (direction) => {
+  if (animationStatus) {
+    animationStatus = false;
+    if (direction == "sign") {
+      loginContent.style.display = "flex";
+      windowContent.animate(changingNextPage, 200);
+
+      setTimeout(() => {
+        signinContent.style.display = "none";
+        animationStatus = true;
+      }, 200);
+    }
+    if (direction == "log") {
+      signinContent.style.display = "flex";
+      windowContent.animate(changingPreviousPage, 200);
+
+      setTimeout(() => {
+        loginContent.style.display = "none";
+        animationStatus = true;
+      }, 200);
+    }
+  }
+};
+const loginDisappear = () => {
+  animationStatus = false;
+  loginBlur.animate(loginDisappearAnimation, 210);
+  setTimeout(() => {
+    loginBlur.style.display = "none";
+    animationStatus = true;
+  }, 200);
+};
+const loginDisappearAnimation = [{ opacity: "100%" }, { opacity: "0" }];
+continueButtons.forEach((e) => {
+  e.addEventListener("click", loginDisappear);
+});
+signinChangeButton.addEventListener("click", () => {
+  changingLoginWindow("sign");
+});
+signinSubmitButton.addEventListener("click", () => {
+  changingLoginWindow("sign");
+});
+loginChangeButton.addEventListener("click", () => {
+  changingLoginWindow("log");
+});
+loginSubmitButton.addEventListener("click", () => {
+  loginDisappear();
+});
+
 // MAIN MENU
 // MAIN MENU
 // MAIN MENU

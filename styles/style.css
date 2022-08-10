@@ -18,6 +18,133 @@ div.wrapper {
 div.additionalContainers {
   display: none;
 }
+/*<---------AUTHENTICATION----------->*/
+/*<---------AUTHENTICATION----------->*/
+/*<---------AUTHENTICATION----------->*/
+div.loginBlur {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(5px);
+}
+div.loginWindow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 400px;
+  background-color: #cfc;
+  border: 4px solid #6a8c13;
+  border-radius: 10px;
+  overflow: scroll;
+}
+div.windowContent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+}
+/* SIGN IN */
+div.signinContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex-basis: 100%;
+  gap: 30px;
+}
+div.signinContent h1 {
+  text-align: center;
+  font-size: 3rem;
+  padding: 15px;
+  text-decoration: underline;
+  text-shadow: white 1px 1px 5px;
+  width: 292px;
+  color: #6a8c13;
+  flex-basis: 10%;
+}
+div.signinContent input {
+  background-color: #6a8c13;
+  font-size: 2rem;
+  color: #3f520b;
+  text-shadow: #ada 1px 1px 5px;
+  margin: 0 20px;
+  cursor: text;
+}
+div.signinSubmitButton {
+  font-size: 3rem;
+  color: #3f520b;
+  text-shadow: #ada 1px 1px 5px;
+  text-align: center;
+  border: #6a8c13 solid 4px;
+  padding: 5px 10px;
+  border-radius: 15px;
+  margin: 0 auto;
+  font-weight: bold;
+}
+div.signinChangeButton {
+  font-size: 1.5rem;
+  color: #3f520b;
+  text-shadow: #ada 1px 1px 5px;
+  text-align: center;
+  margin: 0 auto;
+}
+div.continueButton {
+  font-size: 1.5rem;
+  color: #3f520b;
+  text-shadow: #ada 1px 1px 5px;
+  text-align: center;
+  margin: 0 auto;
+}
+/* LOGIN */
+div.loginContent {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+  flex-basis: 100%;
+  gap: 30px;
+}
+div.loginContent h1 {
+  text-align: center;
+  font-size: 3rem;
+  padding: 15px;
+  text-decoration: underline;
+  text-shadow: white 1px 1px 5px;
+  width: 292px;
+  color: #6a8c13;
+  flex-basis: 10%;
+}
+div.loginContent input {
+  background-color: #6a8c13;
+  font-size: 2rem;
+  color: #3f520b;
+  text-shadow: #ada 1px 1px 5px;
+  margin: 0 20px;
+  cursor: text;
+}
+div.loginSubmitButton {
+  font-size: 3rem;
+  color: #3f520b;
+  text-shadow: #ada 1px 1px 5px;
+  text-align: center;
+  border: #6a8c13 solid 4px;
+  padding: 5px 10px;
+  border-radius: 15px;
+  margin: 0 auto;
+  font-weight: bold;
+}
+div.loginChangeButton {
+  font-size: 1.5rem;
+  color: #3f520b;
+  text-shadow: #ada 1px 1px 5px;
+  text-align: center;
+  margin: 0 auto;
+}
 /*<---------MAIN MENU----------->*/
 /*<---------MAIN MENU----------->*/
 /*<---------MAIN MENU----------->*/
