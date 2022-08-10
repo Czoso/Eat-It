@@ -12,6 +12,7 @@ div.wrapper {
   flex-direction: row;
   align-items: stretch;
   justify-content: space-between;
+  background-color: #cfc;
   min-height: 100vh;
 }
 div.additionalContainers {
@@ -61,7 +62,215 @@ div.mainMenuButtonText {
   margin-top: 20%;
   text-align: center;
 }
+/*<---------YOUR RECIPES----------->*/
+/*<---------YOUR RECIPES----------->*/
+/*<---------YOUR RECIPES----------->*/
 
+div.yourRecipes {
+  display: none;
+  /*display: flex;*/
+}
+/* Your Recipes Browser */
+div.yourRecipesBrowser {
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100vw;
+  height: 100vh;
+  background-color: #cfc;
+  /* display: none; */
+  display: flex;
+}
+div.yourRecipesLogo {
+  position: fixed;
+  background-image: url("../images/logoNew.png");
+  background-size: contain;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  bottom: 10px;
+  left: 10px;
+  width: 25vw;
+  height: 25vw;
+  margin-bottom: 5%;
+}
+div.yourRecipesExitButton {
+  display: flex;
+  margin-right: 5%;
+  margin-left: 65%;
+  margin-top: 5%;
+  width: 20vw;
+  height: 20vw;
+  box-shadow: #000 1px 1px 5px;
+}
+img.yourRecipesExitImage {
+  width: 100%;
+}
+div.yourRecipesBrowser h1 {
+  text-align: center;
+  font-size: 3rem;
+  padding: 15px;
+  text-decoration: underline;
+  text-shadow: white 1px 1px 5px;
+  color: #6a8c13;
+  flex-basis: 10%;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 80%;
+  padding-right: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(transparent, #3f520b);
+  border-radius: 4px;
+}
+div.recipesList {
+  display: flex;
+  overflow: scroll;
+  flex-direction: column;
+  flex-basis: 75%;
+  border: #3f520b solid 2px;
+  box-shadow: #000 1px 1px 5px;
+  border-radius: 15px;
+  width: 90%;
+  height: 200vh;
+  padding: 5px;
+}
+div.singleRecipe {
+  flex-basis: 20%;
+  flex-direction: row;
+  display: flex;
+  flex-shrink: 1;
+}
+div.recipeImage {
+  display: inline-flex;
+  width: 30vw;
+  height: 30vw;
+  margin: 5px;
+}
+img.recipeImage {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  border: #6a8c13 2px solid;
+  border-radius: 10px;
+}
+div.recipeName {
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  flex-grow: 1;
+}
+div.recipeName p {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  text-shadow: #ada 1px 1px 5px;
+  font-size: 3rem;
+  color: #3f520b;
+  line-height: 30px;
+}
+/* Your Recipe Overview */
+div.yourRecipeOverview {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  background-color: #cfc;
+  flex-grow: 1;
+  margin-top: 10px;
+  width: 100vw;
+}
+div.yourRecipeOverviewDishName h1 {
+  font-size: 3.5rem;
+  color: #3f520b;
+  text-shadow: #ada 1px 1px 5px;
+  margin-top: 0;
+  text-align: center;
+}
+div.yourRecipeOverviewTags {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 10px 0;
+}
+img.yourRecipeOverviewTagImage {
+  display: none;
+  width: 12vw;
+  height: 12vw;
+  padding: 1px;
+}
+div.yourRecipeOverviewPhotoDisplay {
+  display: flex;
+  max-width: calc(100vw - 20px);
+  max-height: calc(100vw - 20px);
+  margin: 10px;
+}
+div.yourRecipeOverviewIngredients {
+  display: flex;
+  border: #6a8c13 2px solid;
+  border-radius: 15px;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: calc(100vw - 20px);
+  margin: 10px;
+}
+div.yourRecipeOverviewIngredients h1 {
+  font-size: 3.5rem;
+  color: #3f520b;
+  text-shadow: #ada 1px 1px 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+  font-weight: lighter;
+  text-decoration: underline;
+  padding-bottom: 10px;
+}
+div.yourRecipeOverviewIngredient {
+  width: 100%;
+  font-size: 2rem;
+  color: #3f520b;
+  text-shadow: #ada 1px 1px 3px;
+  margin: 5px 5px 0 5px;
+}
+div.yourRecipeOverviewDescription {
+  border: #6a8c13 2px solid;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: justify;
+  width: calc(100vw - 20px);
+  margin: 10px;
+  padding: 10px 5px;
+  font-size: 2rem;
+  color: #3f520b;
+  text-shadow: #ada 1px 1px 3px;
+}
+div.yourRecipeOverviewButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+}
+img.yourRecipesExitImage {
+  display: flex;
+  text-align: center;
+  margin-top: 10px;
+  width: 20vw;
+  height: 20vw;
+  flex-grow: 1;
+}
+img.yourRecipesDeleteImage {
+  display: flex;
+  text-align: center;
+  margin-top: 10px;
+  width: 20vw;
+  height: 20vw;
+  flex-grow: 1;
+}
 /*<---------NEW DISH----------->*/
 /*<---------NEW DISH----------->*/
 /*<---------NEW DISH----------->*/
@@ -93,7 +302,7 @@ div.menu i {
   text-align: center;
   border: 3px solid #6a8c13;
   border-radius: 4px;
-  background-color: #6a8c13;
+  background-color: #cfc;
   padding: 5px 10px;
   cursor: pointer;
 }
@@ -112,7 +321,7 @@ ul li {
   justify-content: space-between;
   padding: 15px 0;
   line-height: 1.5rem;
-  background-color: #6a8c13;
+  background-color: #cfc;
   flex-wrap: nowrap;
 }
 li.active {
@@ -131,7 +340,7 @@ div.newDishLogo {
   background-size: contain;
   background-position: bottom;
   background-repeat: no-repeat;
-  bottom: 10px;
+  top: 85vh;
   left: 10px;
   width: 100px;
   height: 100px;
@@ -154,10 +363,12 @@ div.nameContent {
   width: 100vw;
 }
 div.nameContent textarea {
-  background-color: #6a8c13;
+  background-color: #cfc;
   flex-basis: 30%;
   font-size: 3rem;
   color: #3f520b;
+  border: #6a8c13 solid 4px;
+  border-radius: 10px;
   text-shadow: #ada 1px 1px 5px;
   margin: 20px 20px;
   cursor: text;
@@ -291,15 +502,15 @@ input.ingredientType:checked {
 }
 div.ingredientInput p {
   line-height: 40px;
-  color: #6a8c13;
-  text-shadow: #3f520b 1px 1px 3px;
+  color: #3f520b;
+  text-shadow: #6a8c13 1px 1px 3px;
   font-size: 2rem;
 }
 div.ingredientSubmit {
   font-size: 3rem;
   background-color: #cfc;
-  color: #6a8c13;
-  text-shadow: #3f520b 1px 1px 3px;
+  color: #3f520b;
+  text-shadow: #6a8c13 1px 1px 3px;
   text-align: center;
   border: #6a8c13 4px solid;
   border-radius: 25px;
@@ -340,8 +551,8 @@ div.ingredientsSubmit {
   text-shadow: #ada 1px 1px 5px;
   text-align: center;
   border: #6a8c13 solid 4px;
-  padding: 5px 10px;
   border-radius: 15px;
+  padding: 5px 10px;
   margin-left: 40%;
   margin-right: 10%;
 }
@@ -364,10 +575,12 @@ div.descriptionContent h1 {
   font-weight: lighter;
 }
 textarea.dishDescription {
-  background-color: #6a8c13;
+  background-color: #cfc;
   flex-basis: 60%;
   font-size: 3rem;
   color: #3f520b;
+  border: #6a8c13 solid 4px;
+  border-radius: 10px;
   text-shadow: #ada 1px 1px 5px;
   margin: 20px 20px;
   cursor: text;
@@ -454,7 +667,6 @@ label {
   color: #3f520b;
   text-shadow: #ada 1px 1px 5px;
   text-align: center;
-
   border: #6a8c13 solid 4px;
   padding: 10px 20px;
   border-radius: 15px;

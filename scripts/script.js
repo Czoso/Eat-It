@@ -3,17 +3,19 @@
 // MAIN MENU
 const mainMenu = document.querySelector("div.mainMenu");
 const newDishButton = document.querySelector("div.newDishButton");
+const yourRecipesButton = document.querySelector("div.yourDishesButton");
 const newDish = document.querySelector("div.newDish");
-const mainMenuDisappear = [
+const yourRecipesContent = document.querySelector("div.yourRecipes");
+const menuDisappear = [
   { transform: "translateY(0)", opacity: "100%" },
   { transform: "translateY(20px)", opacity: "0" },
 ];
-const mainMenuAppear = [
+const menuAppear = [
   { transform: "translateY(20px)", opacity: "0" },
   { transform: "translateY(0)", opacity: "100%" },
 ];
 const disappearing = (content) => {
-  content.animate(mainMenuDisappear, animationDuration);
+  content.animate(menuDisappear, animationDuration);
   setTimeout(() => {
     content.style.display = "none";
   }, animationDuration);
@@ -21,13 +23,118 @@ const disappearing = (content) => {
 const appearing = (content) => {
   setTimeout(() => {
     content.style.display = "flex";
-    content.animate(mainMenuAppear, animationDuration);
+    content.animate(menuAppear, animationDuration);
   }, animationDuration);
 };
 newDishButton.addEventListener("click", () => {
+  do {
+    changingMenu("previous");
+  } while (activeMenuIndex > 0);
+  newRecipeContent.forEach(changingNewDishContent);
+  newRecipeContent[0].style.display = "flex";
   disappearing(mainMenu);
   appearing(newDish);
 });
+yourRecipesButton.addEventListener("click", () => {
+  disappearing(mainMenu);
+  appearing(yourRecipesContent);
+});
+// YOUR RECIPES
+// YOUR RECIPES
+// YOUR RECIPES
+const yourRecipesExitButton = document.querySelector(
+  "div.yourRecipesExitButton"
+);
+const yourRecipesBrowser = document.querySelector("div.yourRecipesBrowser");
+const recipeList = document.querySelector("div.recipesList");
+const yourRecipesOverview = document.querySelector("div.yourRecipeOverview");
+const yourRecipeOverviewIngredientsList = document.querySelector(
+  "div.yourRecipeOverviewIngredients"
+);
+const yourRecipeOverviewDescription = document.querySelector(
+  "div.yourRecipeOverviewDescription"
+);
+
+const yourRecipesOverviewDishName = document.querySelector(
+  "div.yourRecipeOverviewDishName h1"
+);
+const yourRecipesOverviewPhotoDisplay = document.querySelector(
+  "div.yourRecipeOverviewPhotoDisplay img"
+);
+const yourRecipeOverviewTagImage = Array.from(
+  document.querySelectorAll("img.yourRecipeOverviewTagImage")
+);
+const yourRecipeOverviewExitButton = document.querySelector(
+  "div.yourRecipeOverviewExitButton"
+);
+const yourRecipeOverviewDeleteButton = document.querySelector(
+  "div.yourRecipeOverviewDeleteButton"
+);
+let dishToDelete;
+yourRecipesExitButton.addEventListener("click", () => {
+  disappearing(yourRecipesContent);
+  appearing(mainMenu);
+});
+yourRecipeOverviewDeleteButton.addEventListener("click", () => {
+  disappearing(yourRecipesOverview);
+  appearing(yourRecipesBrowser);
+  dishes.splice(createdRecipes.indexOf(dishToDelete), 1);
+  createdRecipes.splice(createdRecipes.indexOf(dishToDelete), 1);
+  dishToDelete.remove();
+});
+yourRecipeOverviewExitButton.addEventListener("click", () => {
+  disappearing(yourRecipesOverview);
+  appearing(yourRecipesBrowser);
+});
+const recipeOverviewAppearing = function () {
+  disappearing(yourRecipesBrowser);
+  appearing(yourRecipesOverview);
+  dishToDelete = this;
+  yourRecipeOverviewTagImage.forEach((element) => {
+    element.style.display = "none";
+  });
+  yourRecipesOverviewDishName.textContent = capitalizeFirstLetter(
+    dishes[createdRecipes.indexOf(this)].recipeName
+  );
+  createdRecipes.indexOf(this);
+  const yourRecipeIngredientsOverviewDelete = () => {
+    const ingredientsToDelete = Array.from(
+      document.querySelectorAll("div.yourRecipeOverviewIngredient")
+    );
+    ingredientsToDelete.forEach((element) => {
+      if (element.classList.contains("yourRecipeOverviewIngredient")) {
+        element.remove();
+      }
+    });
+  };
+  yourRecipeIngredientsOverviewDelete();
+  const yourRecipesIngredientsOverviewDisplay = function (element) {
+    const overviewIngredient = document.createElement("div");
+    overviewIngredient.classList.add("yourRecipeOverviewIngredient");
+    overviewIngredient.textContent = `${element.name} - ${element.quantity} ${element.type}`;
+    yourRecipeOverviewIngredientsList.appendChild(overviewIngredient);
+  };
+
+  dishes[createdRecipes.indexOf(this)].recipeIngredients.forEach(
+    yourRecipesIngredientsOverviewDisplay
+  );
+  yourRecipeOverviewDescription.textContent =
+    dishes[createdRecipes.indexOf(this)].recipeDescription;
+  const yourRecipeTagsDisplay = (element) => {
+    const tagsSourceCheck = (singleTagImage) => {
+      if (singleTagImage.src == element.src) {
+        singleTagImage.style.display = "block";
+      }
+    };
+    yourRecipeOverviewTagImage.forEach(tagsSourceCheck);
+  };
+  dishes[createdRecipes.indexOf(this)].recipeTags.forEach(
+    yourRecipeTagsDisplay
+  );
+  // console.log(yourRecipesOverviewPhotoDisplay.src);
+  yourRecipesOverviewPhotoDisplay.src =
+    dishes[createdRecipes.indexOf(this)].recipePhotoSrc;
+};
 // NEW DISH
 // NEW DISH
 // NEW DISH
@@ -77,13 +184,14 @@ const dishSubmitButton = document.querySelector("div.dishSubmit");
 let deleteButtons;
 let deletedIngredient;
 let dishName = "";
-let dishIngredients = "";
+let dishIngredients = [];
 let dishDescription = "";
 let ingredientName;
 let ingredientQuantity;
 let ingredientType;
 let uploadedImage = "";
 let tags = [];
+const createdRecipes = [];
 const activatedTags = [];
 const animationDuration = 200;
 const capitalizeFirstLetter = (string) => {
@@ -115,12 +223,21 @@ function ingredient(name, quantity, type) {
   this.type = type;
 }
 const dishes = [];
-const dish = function (name, ingredients, description, tags, photo) {
-  dishName: name;
-  ingredients: ingredients;
-  description: description;
-  tags: tags;
-  photoSrc: photo;
+const dish = {
+  recipeName: "",
+  recipeIngredients: [],
+  recipeDescription: "",
+  recipeTags: [],
+  recipePhotoSrc: "",
+};
+const createDish = function (name, ingredients, description, tags, photo) {
+  const newDishObject = Object.create(dish);
+  newDishObject.recipeName = name;
+  newDishObject.recipeIngredients = ingredients;
+  newDishObject.recipeDescription = description;
+  newDishObject.recipeTags = tags;
+  newDishObject.recipePhotoSrc = photo;
+  dishes.push(newDishObject);
 };
 const changingNextMenu = [
   { transform: "scale(0.1)" },
@@ -144,7 +261,8 @@ const indexCheck = function (element, index) {
     activeMenuIndex = index;
   }
 };
-const changingNewDishContent = function (index) {
+const changingNewDishContent = function (element, index) {
+  newRecipeContent[index];
   newRecipeContent[index].style.display = "none";
 };
 const changingMenu = function (direction) {
@@ -157,7 +275,7 @@ const changingMenu = function (direction) {
       navi[activeMenuIndex + 1].animate(changingNextMenu, changingMenuTiming);
       newDishContent.style.animationFillMode = "forwards";
       setTimeout(() => {
-        changingNewDishContent(activeMenuIndex - 1);
+        changingNewDishContent("", activeMenuIndex - 1);
         setTimeout(() => {
           newDishContent.style.animationFillMode = "none";
         }, 200);
@@ -175,7 +293,7 @@ const changingMenu = function (direction) {
       navi[activeMenuIndex - 1].animate(changingNextMenu, changingMenuTiming);
       newDishContent.style.animationFillMode = "forwards";
       setTimeout(() => {
-        changingNewDishContent(activeMenuIndex + 1);
+        changingNewDishContent("", activeMenuIndex + 1);
         newDishContent.style.animationFillMode = "none";
       }, 200);
       newDishContent.animate(changingPreviousPage, changingMenuTiming);
@@ -209,7 +327,7 @@ nameSubmitButton.addEventListener("click", () => {
   }
   overviewSubmitDisplay();
 });
-newDishExitButton.addEventListener("click", () => {
+const clearNewDish = () => {
   const disactivateTags = (element, index) => {
     if (element.classList.contains("active")) {
       element.classList.toggle("active");
@@ -235,7 +353,8 @@ newDishExitButton.addEventListener("click", () => {
   dishSubmitButton.style.display = "none";
   displayedImageBracket.style.display = "none";
   overviewPhotoDisplay.style.display = "none";
-});
+};
+newDishExitButton.addEventListener("click", clearNewDish);
 // Ingredients
 const inputTypeCheck = function (element) {
   if (element.checked) {
@@ -286,6 +405,7 @@ const ingredientsDisplay = function (element, index) {
   deleteButtons.forEach(deleteButtonFunction);
 };
 const deleteIngredient = function () {
+  console.log(this);
   const deleteIndex = deleteButtons.indexOf(this);
   ingredients.splice(deleteIndex, 1);
   ingredientsUpdate();
@@ -370,7 +490,7 @@ ingredientsSubmitButton.addEventListener("click", () => {
   changingMenu("next");
   ingredientsOverviewDelete();
   overviewSubmitDisplay();
-  dishIngredients = ingredients;
+  dishIngredients = [...ingredients];
   dishIngredients.forEach(ingredientsOverviewDisplay);
 
   if (ingredients.length > 0) {
@@ -446,7 +566,7 @@ const tagClearFunction = function (element, index, array) {
 tagsSubmitButton.addEventListener("click", () => {
   activatedTags.splice(0, activatedTags.length);
   tagsImage.forEach(tagActiveCheck);
-  tags = activatedTags;
+  tags = [...activatedTags];
   changingMenu("next");
   overviewSubmitDisplay();
 });
@@ -490,12 +610,9 @@ const ingredientsOverviewDelete = () => {
   const ingredientsToDelete = Array.from(
     document.querySelectorAll("div.overviewIngredient")
   );
-  let deleteCounter = 0;
   ingredientsToDelete.forEach((element) => {
     if (element.classList.contains("overviewIngredient")) {
       element.remove();
-    } else {
-      deleteCounter++;
     }
   });
 };
@@ -505,3 +622,40 @@ const ingredientsOverviewDisplay = function (element, index) {
   overviewIngredient.textContent = `${element.name} - ${element.quantity} ${element.type}`;
   overviewIngredientsList.appendChild(overviewIngredient);
 };
+const createdRecipesDisplay = () => {
+  createdRecipes.forEach((element) => {
+    element.remove();
+  });
+  createdRecipes.splice(0, createdRecipes.length);
+  dishes.forEach((element) => {
+    const newSingleRecipe = document.createElement("div");
+    newSingleRecipe.classList.toggle("singleRecipe");
+    recipeList.appendChild(newSingleRecipe);
+    newSingleRecipe.addEventListener("click", recipeOverviewAppearing);
+    createdRecipes.push(newSingleRecipe);
+    const singleRecipeImage = document.createElement("div");
+    singleRecipeImage.classList.toggle("recipeImage");
+    newSingleRecipe.appendChild(singleRecipeImage);
+    const recipeImage = document.createElement("img");
+    recipeImage.classList.toggle("recipeImage");
+    singleRecipeImage.appendChild(recipeImage);
+    const recipeName = document.createElement("div");
+    recipeName.classList.toggle("recipeName");
+    newSingleRecipe.appendChild(recipeName);
+    const recipeNameText = document.createElement("p");
+    recipeName.appendChild(recipeNameText);
+    recipeNameText.textContent = element.recipeName;
+    recipeImage.src = element.recipePhotoSrc;
+  });
+};
+dishSubmitButton.addEventListener("click", () => {
+  createDish(
+    dishName,
+    [...ingredients],
+    dishDescription,
+    [...tags],
+    uploadedImage
+  );
+  clearNewDish();
+  createdRecipesDisplay();
+});
