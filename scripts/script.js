@@ -34,6 +34,7 @@ newDishButton.addEventListener("click", () => {
   newRecipeContent[0].style.display = "flex";
   disappearing(mainMenu);
   appearing(newDish);
+  animationStatus = true;
 });
 yourRecipesButton.addEventListener("click", () => {
   disappearing(mainMenu);
@@ -191,6 +192,7 @@ let ingredientQuantity;
 let ingredientType;
 let uploadedImage = "";
 let tags = [];
+let animationStatus = true;
 const createdRecipes = [];
 const activatedTags = [];
 const animationDuration = 200;
@@ -266,45 +268,52 @@ const changingNewDishContent = function (element, index) {
   newRecipeContent[index].style.display = "none";
 };
 const changingMenu = function (direction) {
-  if (direction == "next") {
-    if (activeMenuIndex < 5) {
-      navi[activeMenuIndex].textContent = " ";
-      navi[activeMenuIndex + 1].textContent = menuContent[activeMenuIndex + 1];
-      navi[activeMenuIndex].classList.toggle("active");
-      navi[activeMenuIndex + 1].classList.toggle("active");
-      navi[activeMenuIndex + 1].animate(changingNextMenu, changingMenuTiming);
-      newDishContent.style.animationFillMode = "forwards";
-      setTimeout(() => {
-        changingNewDishContent("", activeMenuIndex - 1);
+  if (animationStatus) {
+    animationStatus = false;
+    if (direction == "next") {
+      if (activeMenuIndex < 5) {
+        navi[activeMenuIndex].textContent = " ";
+        navi[activeMenuIndex + 1].textContent =
+          menuContent[activeMenuIndex + 1];
+        navi[activeMenuIndex].classList.toggle("active");
+        navi[activeMenuIndex + 1].classList.toggle("active");
+        navi[activeMenuIndex + 1].animate(changingNextMenu, changingMenuTiming);
+        newDishContent.style.animationFillMode = "forwards";
         setTimeout(() => {
-          newDishContent.style.animationFillMode = "none";
+          changingNewDishContent("", activeMenuIndex - 1);
+          animationStatus = true;
         }, 200);
-      }, 200);
-      newDishContent.animate(changingNextPage, changingMenuTiming);
-      newRecipeContent[activeMenuIndex + 1].style.display = "flex";
+        newDishContent.animate(changingNextPage, changingMenuTiming);
+        newRecipeContent[activeMenuIndex + 1].style.display = "flex";
+      } else {
+        animationStatus = true;
+      }
     }
-  }
-  if (direction == "previous") {
-    if (activeMenuIndex > 0) {
-      navi[activeMenuIndex].textContent = " ";
-      navi[activeMenuIndex - 1].textContent = menuContent[activeMenuIndex - 1];
-      navi[activeMenuIndex].classList.toggle("active");
-      navi[activeMenuIndex - 1].classList.toggle("active");
-      navi[activeMenuIndex - 1].animate(changingNextMenu, changingMenuTiming);
-      newDishContent.style.animationFillMode = "forwards";
-      setTimeout(() => {
-        changingNewDishContent("", activeMenuIndex + 1);
-        newDishContent.style.animationFillMode = "none";
-      }, 200);
-      newDishContent.animate(changingPreviousPage, changingMenuTiming);
-      newRecipeContent[activeMenuIndex - 1].style.display = "flex";
+    if (direction == "previous") {
+      if (activeMenuIndex > 0) {
+        navi[activeMenuIndex].textContent = " ";
+        navi[activeMenuIndex - 1].textContent =
+          menuContent[activeMenuIndex - 1];
+        navi[activeMenuIndex].classList.toggle("active");
+        navi[activeMenuIndex - 1].classList.toggle("active");
+        navi[activeMenuIndex - 1].animate(changingNextMenu, changingMenuTiming);
+        newDishContent.style.animationFillMode = "forwards";
+        setTimeout(() => {
+          changingNewDishContent("", activeMenuIndex + 1);
+          animationStatus = true;
+        }, 200);
+        newDishContent.animate(changingPreviousPage, changingMenuTiming);
+        newRecipeContent[activeMenuIndex - 1].style.display = "flex";
+      } else {
+        animationStatus = true;
+      }
     }
-  }
-  navi.forEach(indexCheck);
-  if (activeMenuIndex == 5) {
-    newDishLogo.style.display = "none";
-  } else {
-    newDishLogo.style.display = "block";
+    navi.forEach(indexCheck);
+    if (activeMenuIndex == 5) {
+      newDishLogo.style.display = "none";
+    } else {
+      newDishLogo.style.display = "block";
+    }
   }
 };
 
