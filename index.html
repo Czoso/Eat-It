@@ -483,5 +483,98 @@
       </div>
     </div>
     <script src="scripts/script.js"></script>
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-app.js";
+      import {
+        getDatabase,
+        set,
+        ref,
+        update,
+      } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-database.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-auth.js";
+
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBAO7JMLqcEo3Jrcg3p9t1-Lmg_lxXVA1I",
+        authDomain: "eat-it-a4c55.firebaseapp.com",
+        databaseURL:
+          "https://eat-it-a4c55-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "eat-it-a4c55",
+        storageBucket: "eat-it-a4c55.appspot.com",
+        messagingSenderId: "314439023911",
+        appId: "1:314439023911:web:d15c9605db621e5ec1bd02",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const database = getDatabase(app);
+      const auth = getAuth();
+      const user = auth.currentUser;
+      const signinSubmitButton = document.querySelector(
+        "div.signinSubmitButton"
+      );
+      const loginSubmitButton = document.querySelector("div.loginSubmitButton");
+
+      signinSubmitButton.addEventListener("click", (e) => {
+        let email = document.querySelector("input.eMailSignin").value;
+        let password = document.querySelector("input.passwordSignin").value;
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+            set(ref(database, "users/", user.uid), {
+              email: email,
+            });
+            alert("User created! Please log in");
+            // ...
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert(errorMessage);
+            // ..
+          });
+      });
+      loginSubmitButton.addEventListener("click", (e) => {
+        let email = document.querySelector("input.eMailSignin").value;
+        let password = document.querySelector("input.passwordSignin").value;
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+            const dt = new Date();
+            update(ref(database, "users/", user.uid), {
+              last_login: dt,
+            });
+            // ...
+            alert("Logged in!");
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert(errorMessage);
+          });
+      });
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is signed in, see docs for a list of available properties
+          // https://firebase.google.com/docs/reference/js/firebase.User
+          const uid = user.uid;
+          // ...
+        } else {
+          // User is signed out
+          // ...
+        }
+      });
+    </script>
   </body>
 </html>
