@@ -54,9 +54,9 @@ signinSubmitButton.addEventListener("click", () => {
 loginChangeButton.addEventListener("click", () => {
   changingLoginWindow("log");
 });
-loginSubmitButton.addEventListener("click", () => {
-  loginDisappear();
-});
+// loginSubmitButton.addEventListener("click", () => {
+//   loginDisappear();
+// });
 
 // MAIN MENU
 // MAIN MENU
