@@ -66,6 +66,8 @@ const newDishButton = document.querySelector("div.newDishButton");
 const yourRecipesButton = document.querySelector("div.yourDishesButton");
 const newDish = document.querySelector("div.newDish");
 const yourRecipesContent = document.querySelector("div.yourRecipes");
+const settingsContent = document.querySelector("div.settingsContent");
+const settingsButton = document.querySelector("div.settingsButton");
 const menuDisappear = [
   { transform: "translateY(0)", opacity: "100%" },
   { transform: "translateY(20px)", opacity: "0" },
@@ -99,6 +101,10 @@ newDishButton.addEventListener("click", () => {
 yourRecipesButton.addEventListener("click", () => {
   disappearing(mainMenu);
   appearing(yourRecipesContent);
+});
+settingsButton.addEventListener("click", () => {
+  disappearing(mainMenu);
+  appearing(settingsContent);
 });
 // YOUR RECIPES
 // YOUR RECIPES
@@ -728,3 +734,6 @@ dishSubmitButton.addEventListener("click", () => {
   clearNewDish();
   createdRecipesDisplay();
 });
+// SETTINGS
+// SETTINGS
+// SETTINGS

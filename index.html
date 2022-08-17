@@ -16,7 +16,6 @@
       <!-- LOGIN -->
       <!-- LOGIN -->
       <!-- LOGIN -->
-      <!-- <img src="" alt="userPhoto" class="userPhoto" /> -->
       <div class="loginBlur">
         <div class="loginWindow">
           <div class="windowContent">
@@ -425,7 +424,7 @@
               accept="image/png, image/jpg"
               class="photoInput"
             />
-            <label for="photoInput">
+            <label for="photoInput" class="photoInput">
               <i class="fas fa-upload"></i> &nbsp; Choose A Photo
             </label>
             <div class="photoDisplay"><img src="" alt="" class="photo" /></div>
@@ -482,8 +481,19 @@
           </div>
         </div>
       </div>
+      <div class="settings">
+        <div class="settingsContent">
+          <input
+            type="file"
+            id="userPhotoInput"
+            accept="image/png, image/jpg"
+            class="userPhotoInput"
+          />
+          <label for="userPhotoInput" class="userPhotoInput"> </label>
+        </div>
+      </div>
     </div>
-    <script type="module" src="scripts/script.js"></script>
+    <script src="scripts/script.js"></script>
     <script type="module">
       // Import the functions you need from the SDKs you need
       import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-app.js";
@@ -492,6 +502,7 @@
         set,
         ref,
         update,
+        onValue,
       } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-database.js";
       import {
         getAuth,
@@ -520,21 +531,24 @@
       const database = getDatabase(app);
       const auth = getAuth();
       const user = auth.currentUser;
+      let loggedUserPhoto = "";
       const signinSubmitButton = document.querySelector(
         "div.signinSubmitButton"
       );
       const loginSubmitButton = document.querySelector("div.loginSubmitButton");
-
       const userPhoto = document.querySelector("img.userPhoto");
+      const userPhotoLabel = document.querySelector("label.userPhotoInput");
       signinSubmitButton.addEventListener("click", (e) => {
         let email = document.querySelector("input.eMailSignin").value;
         let password = document.querySelector("input.passwordSignin").value;
+
         createUserWithEmailAndPassword(auth, email, password)
           .then((userCredential) => {
             // Signed in
             const user = userCredential.user;
-            set(ref(database, "users/", user.uid), {
+            set(ref(database, "users/" + user.uid, user.uid), {
               email: email,
+              photoURL: "https://i.imgur.com/JPMGzq9.png",
             });
             alert("User created! Please log in");
             // ...
@@ -565,8 +579,17 @@
             // Signed in
             const user = userCredential.user;
             const dt = new Date();
-            update(ref(database, "users/", user.uid), {
+            update(ref(database, "users/" + user.uid, user.uid), {
               last_login: dt,
+            });
+            const photoURLRef = ref(
+              database,
+              "users/" + user.uid + "/photoURL"
+            );
+            onValue(photoURLRef, (snapshot) => {
+              const loggedUserPhoto = snapshot.val();
+              console.log("data=" + loggedUserPhoto);
+              userPhotoLabel.style.backgroundImage = `url(${loggedUserPhoto})`;
             });
 
             loginDisappear();
@@ -589,6 +612,22 @@
           // ...
         }
       });
+
+      // userPhotoLabel.addEventListener("change", function () {
+      //   const reader = new FileReader();
+      //   console.log(reader);
+      //   reader.addEventListener("load", () => {
+      //     uploadedImage = reader.result;
+      //     displayedPhoto = new Image();
+
+      //     dishPhotos.forEach((element) => {
+      //       element.setAttribute("src", reader.result);
+      //     });
+      //     displayedImageBracket.style.display = "inline-flex";
+      //     overviewPhotoDisplay.style.display = "inline-flex";
+      //   });
+      //   reader.readAsDataURL(this.files[0]);
+      // });
     </script>
   </body>
 </html>
