@@ -652,11 +652,7 @@
               const errorMessage = error.message;
               alert(errorMessage);
             })
-            .then(
-              getDownloadURL(storageRef).then((downloadURL) => {
-                console.log(downloadURL);
-              })
-            );
+            .then(getDownloadURL(storageRef).then((downloadURL) => {}));
         });
         console.log(file.name);
       }
