@@ -1,9 +1,155 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-app.js";
+import {
+  getDatabase,
+  set,
+  ref,
+  update,
+  onValue,
+} from "https://www.gstatic.com/firebasejs/9.9.2/firebase-database.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+} from "https://www.gstatic.com/firebasejs/9.9.2/firebase-auth.js";
+import {
+  getStorage,
+  ref as sRef,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "https://www.gstatic.com/firebasejs/9.9.2/firebase-storage.js";
+
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBAO7JMLqcEo3Jrcg3p9t1-Lmg_lxXVA1I",
+  authDomain: "eat-it-a4c55.firebaseapp.com",
+  databaseURL:
+    "https://eat-it-a4c55-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "eat-it-a4c55",
+  storageBucket: "eat-it-a4c55.appspot.com",
+  messagingSenderId: "314439023911",
+  appId: "1:314439023911:web:d15c9605db621e5ec1bd02",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+const auth = getAuth();
+const user = auth.currentUser;
+let loggedUserPhoto = "";
+let userID;
+let userImage;
+const userPhoto = document.querySelector("img.userPhoto");
+const userPhotoLabel = document.querySelector("label.userPhotoInput");
+const userPhotoInput = document.querySelector("input.userPhotoInput");
+const signinSubmitButton = document.querySelector("div.signinSubmitButton");
+const loginSubmitButton = document.querySelector("div.loginSubmitButton");
+signinSubmitButton.addEventListener("click", (e) => {
+  let email = document.querySelector("input.eMailSignin").value;
+  let password = document.querySelector("input.passwordSignin").value;
+
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed in
+      const user = userCredential.user;
+      set(ref(database, "users/" + user.uid, user.uid), {
+        email: email,
+        photoURL: "https://i.imgur.com/JPMGzq9.png",
+      });
+      alert("User created! Please log in");
+      // ...
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      alert(errorMessage);
+      // ..
+    });
+});
+loginSubmitButton.addEventListener("click", (e) => {
+  let email = document.querySelector("input.eMailLogin").value;
+  let password = document.querySelector("input.passwordLogin").value;
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed in
+      const user = userCredential.user;
+      userID = user.uid;
+      const dt = new Date();
+      update(ref(database, "users/" + user.uid, user.uid), {
+        last_login: dt,
+      });
+      const photoURLRef = ref(database, "users/" + user.uid + "/photoURL");
+      onValue(photoURLRef, (snapshot) => {
+        const loggedUserPhoto = snapshot.val();
+        userPhotoLabel.style.backgroundImage = `url(${loggedUserPhoto})`;
+      });
+
+      loginDisappear();
+      alert("Logged in!");
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      alert(errorMessage);
+    });
+});
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    userPhotoInput.addEventListener("change", imageUpload);
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/firebase.User
+    const uid = user.uid;
+    // ...
+  } else {
+    // User is signed out
+    // ...
+  }
+});
+async function imageUpload() {
+  const file = userPhotoInput.files.item(0);
+  const reader = new FileReader();
+  const storage = getStorage();
+  reader.readAsDataURL(file);
+  const getFileExtension = (file) => {
+    console.log(file.name);
+    const fileNameExtention = file.name.split(".");
+    const extention = fileNameExtention.slice(
+      fileNameExtention.length - 1,
+      fileNameExtention.length
+    );
+    return "." + extention[0];
+  };
+  const storageRef = sRef(storage, "images/" + userID + getFileExtension(file));
+  reader.addEventListener("load", () => {
+    userImage = reader.result;
+    console.log(userImage);
+    const metaData = {
+      contentType: getFileExtension(file),
+    };
+    uploadBytesResumable(storageRef, file, metaData)
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        alert(errorMessage);
+      })
+      .then(
+        getDownloadURL(storageRef).then((downloadURL) => {
+          set(ref(database, "users/" + userID, userID), {
+            photoURL: downloadURL,
+          });
+        })
+      );
+  });
+  console.log(file.name);
+}
 // LOGIN
 const signinContent = document.querySelector("div.signinContent");
 const loginContent = document.querySelector("div.loginContent");
-const signinSubmitButton = document.querySelector("div.signinSubmitButton");
 const signinChangeButton = document.querySelector("div.signinChangeButton");
-const loginSubmitButton = document.querySelector("div.loginSubmitButton");
 const loginChangeButton = document.querySelector("div.loginChangeButton");
 const windowContent = document.querySelector("div.windowContent");
 const continueButtons = Array.from(
