@@ -274,7 +274,6 @@ yourRecipeOverviewExitButton.addEventListener("click", () => {
 });
 const recipeOverviewAppearing = function () {
   console.log("aktywacja");
-  console.log(dishes[0]);
   disappearing(yourRecipesBrowser);
   appearing(yourRecipesOverview);
   dishToDelete = this;
@@ -282,7 +281,7 @@ const recipeOverviewAppearing = function () {
     element.style.display = "none";
   });
   yourRecipesOverviewDishName.textContent = capitalizeFirstLetter(
-    dishes[createdRecipes.indexOf(this)].recipeName
+    dishes.dishes[createdRecipes.indexOf(this)].recipeName
   );
   createdRecipes.indexOf(this);
   const yourRecipeIngredientsOverviewDelete = () => {
@@ -303,23 +302,23 @@ const recipeOverviewAppearing = function () {
     yourRecipeOverviewIngredientsList.appendChild(overviewIngredient);
   };
 
-  dishes[createdRecipes.indexOf(this)].recipeIngredients.forEach(
+  dishes.dishes[createdRecipes.indexOf(this)].recipeIngredients.forEach(
     yourRecipesIngredientsOverviewDisplay
   );
   yourRecipeOverviewDescription.textContent =
-    dishes[createdRecipes.indexOf(this)].recipeDescription;
+    dishes.dishes[createdRecipes.indexOf(this)].recipeDescription;
   const yourRecipeTagsDisplay = (element, index) => {
     console.log(element);
     if (element == true) {
       yourRecipeOverviewTagImage[index].style.display = "block";
     }
   };
-  dishes[createdRecipes.indexOf(this)].recipeTags.forEach(
+  dishes.dishes[createdRecipes.indexOf(this)].recipeTags.forEach(
     yourRecipeTagsDisplay
   );
   // console.log(yourRecipesOverviewPhotoDisplay.src);
   yourRecipesOverviewPhotoDisplay.src =
-    dishes[createdRecipes.indexOf(this)].recipePhotoSrc;
+    dishes.dishes[createdRecipes.indexOf(this)].recipePhotoSrc;
 };
 // NEW DISH
 // NEW DISH
