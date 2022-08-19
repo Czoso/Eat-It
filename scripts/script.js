@@ -208,9 +208,8 @@ const appearing = (content) => {
   }, animationDuration);
 };
 newDishButton.addEventListener("click", () => {
-  do {
-    changingMenu("previous");
-  } while (activeMenuIndex > 0);
+  console.log("1");
+  console.log("3");
   newRecipeContent.forEach(changingNewDishContent);
   newRecipeContent[0].style.display = "flex";
   disappearing(mainMenu);
@@ -453,7 +452,7 @@ const createDish = function (name, ingredients, description, tags) {
                 if (snapshot.exists()) {
                   console.log("update");
                   update(ref(database, "users/" + userID + "/dishes"), {
-                    dishes: [...dishes, newDishObject],
+                    dishes: [...dishes.dishes, newDishObject],
                   });
                 } else {
                   console.log("set");
@@ -491,12 +490,23 @@ const indexCheck = function (element, index) {
     activeMenuIndex = index;
   }
 };
+const newDishContentComeBack = () => {
+  const interval = setInterval(() => {
+    if (activeMenuIndex > 0) {
+      console.log(activeMenuIndex);
+      changingMenu("previous");
+    } else {
+      window.clearInterval(interval);
+    }
+  }, 200);
+};
 const changingNewDishContent = function (element, index) {
   newRecipeContent[index];
   newRecipeContent[index].style.display = "none";
 };
 const changingMenu = function (direction) {
   if (animationStatus) {
+    console.log(activeMenuIndex);
     animationStatus = false;
     if (direction == "next") {
       if (activeMenuIndex < 5) {
@@ -900,6 +910,7 @@ dishSubmitButton.addEventListener("click", () => {
   setTimeout(() => {
     createdRecipesDisplay();
   }, 1200);
+  newDishContentComeBack();
 });
 // SETTINGS
 // SETTINGS
