@@ -7,6 +7,10 @@ html {
   font-size: 10px;
   font-family: Arial, sans-serif;
 }
+*::selection {
+  background-color: violet;
+  color: white;
+}
 div.wrapper {
   display: flex;
   flex-direction: row;
@@ -857,6 +861,7 @@ img.overviewTagImage {
 }
 div.overviewPhotoDisplay {
   display: none;
+  overflow: hidden;
   max-width: calc(100vw - 20px);
   max-height: calc(100vw - 20px);
   margin: 10px;

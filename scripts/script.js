@@ -3,6 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.2/firebase
 import {
   getDatabase,
   set,
+  get,
   ref,
   update,
   onValue,
@@ -42,7 +43,6 @@ const auth = getAuth();
 const user = auth.currentUser;
 let loggedUserPhoto = "";
 let userID;
-let userImage;
 const userPhoto = document.querySelector("img.userPhoto");
 const userPhotoLabel = document.querySelector("label.userPhotoInput");
 const userPhotoInput = document.querySelector("input.userPhotoInput");
@@ -58,7 +58,11 @@ signinSubmitButton.addEventListener("click", (e) => {
       const user = userCredential.user;
       set(ref(database, "users/" + user.uid, user.uid), {
         email: email,
-        photoURL: "https://i.imgur.com/JPMGzq9.png",
+        photoURL:
+          "https://firebasestorage.googleapis.com/v0/b/eat-it-a4c55.appspot.com/o/images%2FdefaultPhoto.png?alt=media&token=91fbb604-6d71-4b27-bc83-d3b244731f10",
+      });
+      set(ref(database, "users/" + user.uid + "/dishes"), {
+        dishes: [],
       });
       alert("User created! Please log in");
       // ...
@@ -84,8 +88,14 @@ loginSubmitButton.addEventListener("click", (e) => {
       });
       const photoURLRef = ref(database, "users/" + user.uid + "/photoURL");
       onValue(photoURLRef, (snapshot) => {
-        const loggedUserPhoto = snapshot.val();
+        loggedUserPhoto = snapshot.val();
         userPhotoLabel.style.backgroundImage = `url(${loggedUserPhoto})`;
+      });
+      const dishesURLRef = ref(database, "users/" + userID + "/dishes");
+      onValue(dishesURLRef, (snapshot) => {
+        if (snapshot.exists()) {
+          dishes = snapshot.val();
+        }
       });
 
       loginDisappear();
@@ -109,43 +119,6 @@ onAuthStateChanged(auth, (user) => {
     // ...
   }
 });
-async function imageUpload() {
-  const file = userPhotoInput.files.item(0);
-  const reader = new FileReader();
-  const storage = getStorage();
-  reader.readAsDataURL(file);
-  const getFileExtension = (file) => {
-    console.log(file.name);
-    const fileNameExtention = file.name.split(".");
-    const extention = fileNameExtention.slice(
-      fileNameExtention.length - 1,
-      fileNameExtention.length
-    );
-    return "." + extention[0];
-  };
-  const storageRef = sRef(storage, "images/" + userID + getFileExtension(file));
-  reader.addEventListener("load", () => {
-    userImage = reader.result;
-    console.log(userImage);
-    const metaData = {
-      contentType: getFileExtension(file),
-    };
-    uploadBytesResumable(storageRef, file, metaData)
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        alert(errorMessage);
-      })
-      .then(
-        getDownloadURL(storageRef).then((downloadURL) => {
-          set(ref(database, "users/" + userID, userID), {
-            photoURL: downloadURL,
-          });
-        })
-      );
-  });
-  console.log(file.name);
-}
 // LOGIN
 const signinContent = document.querySelector("div.signinContent");
 const loginContent = document.querySelector("div.loginContent");
@@ -300,6 +273,8 @@ yourRecipeOverviewExitButton.addEventListener("click", () => {
   appearing(yourRecipesBrowser);
 });
 const recipeOverviewAppearing = function () {
+  console.log("aktywacja");
+  console.log(dishes[0]);
   disappearing(yourRecipesBrowser);
   appearing(yourRecipesOverview);
   dishToDelete = this;
@@ -333,13 +308,11 @@ const recipeOverviewAppearing = function () {
   );
   yourRecipeOverviewDescription.textContent =
     dishes[createdRecipes.indexOf(this)].recipeDescription;
-  const yourRecipeTagsDisplay = (element) => {
-    const tagsSourceCheck = (singleTagImage) => {
-      if (singleTagImage.src == element.src) {
-        singleTagImage.style.display = "block";
-      }
-    };
-    yourRecipeOverviewTagImage.forEach(tagsSourceCheck);
+  const yourRecipeTagsDisplay = (element, index) => {
+    console.log(element);
+    if (element == true) {
+      yourRecipeOverviewTagImage[index].style.display = "block";
+    }
   };
   dishes[createdRecipes.indexOf(this)].recipeTags.forEach(
     yourRecipeTagsDisplay
@@ -403,8 +376,9 @@ let ingredientName;
 let ingredientQuantity;
 let ingredientType;
 let uploadedImage = "";
-let tags = [];
 let animationStatus = true;
+let dishes = [];
+let uploadedTags = [];
 const createdRecipes = [];
 const activatedTags = [];
 const animationDuration = 200;
@@ -436,7 +410,6 @@ function ingredient(name, quantity, type) {
   this.quantity = quantity;
   this.type = type;
 }
-const dishes = [];
 const dish = {
   recipeName: "",
   recipeIngredients: [],
@@ -444,14 +417,58 @@ const dish = {
   recipeTags: [],
   recipePhotoSrc: "",
 };
-const createDish = function (name, ingredients, description, tags, photo) {
-  const newDishObject = Object.create(dish);
-  newDishObject.recipeName = name;
-  newDishObject.recipeIngredients = ingredients;
-  newDishObject.recipeDescription = description;
-  newDishObject.recipeTags = tags;
-  newDishObject.recipePhotoSrc = photo;
-  dishes.push(newDishObject);
+const createDish = function (name, ingredients, description, tags) {
+  let photo = "";
+  async function dishImageUpload() {
+    const file = photoInput.files.item(0);
+    const reader = new FileReader();
+    const storage = getStorage();
+    reader.readAsDataURL(file);
+    const storageRef = sRef(
+      storage,
+      "images/dishImages/" + userID + "/" + name
+    );
+    reader.addEventListener("load", () => {
+      const metaData = {
+        contentType: getFileExtension(file),
+      };
+      uploadBytesResumable(storageRef, file, metaData).catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        alert(errorMessage);
+      });
+      setTimeout(() => {
+        getDownloadURL(storageRef)
+          .then((downloadURL) => {
+            photo = downloadURL;
+          })
+          .then(() => {
+            const newDishObject = Object.create(dish);
+            newDishObject.recipeName = name;
+            newDishObject.recipeIngredients = ingredients;
+            newDishObject.recipeDescription = description;
+            newDishObject.recipeTags = tags;
+            newDishObject.recipePhotoSrc = photo;
+            get(ref(database, "users/" + userID + "/dishes")).then(
+              (snapshot) => {
+                if (snapshot.exists()) {
+                  console.log("update");
+                  update(ref(database, "users/" + userID + "/dishes"), {
+                    dishes: [...dishes, newDishObject],
+                  });
+                } else {
+                  console.log("set");
+                  set(ref(database, "users/" + userID + "/dishes"), {
+                    dishes: new Array(newDishObject),
+                  });
+                }
+              }
+            );
+          });
+      }, 800);
+    });
+  }
+  dishImageUpload();
 };
 const changingNextMenu = [
   { transform: "scale(0.1)" },
@@ -779,15 +796,18 @@ tagsImage.forEach((element) => {
 const tagActiveCheck = function (element) {
   if (element.classList.contains("active")) {
     activatedTags.push(element);
+    uploadedTags.push(true);
+  } else {
+    uploadedTags.push(false);
   }
 };
 const tagClearFunction = function (element, index, array) {
   array.splice(index, 1);
 };
 tagsSubmitButton.addEventListener("click", () => {
+  uploadedTags = [];
   activatedTags.splice(0, activatedTags.length);
   tagsImage.forEach(tagActiveCheck);
-  tags = [...activatedTags];
   changingMenu("next");
   overviewSubmitDisplay();
 });
@@ -796,7 +816,7 @@ photoInput.addEventListener("change", function () {
   const reader = new FileReader();
   reader.addEventListener("load", () => {
     uploadedImage = reader.result;
-    displayedPhoto = new Image();
+    // displayedPhoto = new Image();
 
     dishPhotos.forEach((element) => {
       element.setAttribute("src", reader.result);
@@ -809,7 +829,6 @@ photoInput.addEventListener("change", function () {
 
 photoSubmitButton.addEventListener("click", () => {
   if (uploadedImage) {
-    overviewPhotoDisplay.style.backgroundImage = `url(${uploadedImage})`;
     changingMenu("next");
   }
   changingMenu("next");
@@ -844,42 +863,77 @@ const ingredientsOverviewDisplay = function (element, index) {
   overviewIngredientsList.appendChild(overviewIngredient);
 };
 const createdRecipesDisplay = () => {
+  console.log("created");
   createdRecipes.forEach((element) => {
     element.remove();
   });
   createdRecipes.splice(0, createdRecipes.length);
-  dishes.forEach((element) => {
-    const newSingleRecipe = document.createElement("div");
-    newSingleRecipe.classList.toggle("singleRecipe");
-    recipeList.appendChild(newSingleRecipe);
-    newSingleRecipe.addEventListener("click", recipeOverviewAppearing);
-    createdRecipes.push(newSingleRecipe);
-    const singleRecipeImage = document.createElement("div");
-    singleRecipeImage.classList.toggle("recipeImage");
-    newSingleRecipe.appendChild(singleRecipeImage);
-    const recipeImage = document.createElement("img");
-    recipeImage.classList.toggle("recipeImage");
-    singleRecipeImage.appendChild(recipeImage);
-    const recipeName = document.createElement("div");
-    recipeName.classList.toggle("recipeName");
-    newSingleRecipe.appendChild(recipeName);
-    const recipeNameText = document.createElement("p");
-    recipeName.appendChild(recipeNameText);
-    recipeNameText.textContent = element.recipeName;
-    recipeImage.src = element.recipePhotoSrc;
-  });
+  get(ref(database, "users/" + userID + "/dishes")).then((snapshot) => {
+    setTimeout(() => {
+      console.log(dishes.dishes);
+      dishes.dishes.forEach((element) => {
+        console.log("leci");
+        const newSingleRecipe = document.createElement("div");
+        newSingleRecipe.classList.toggle("singleRecipe");
+        recipeList.appendChild(newSingleRecipe);
+        newSingleRecipe.addEventListener("click", recipeOverviewAppearing);
+        createdRecipes.push(newSingleRecipe);
+        const singleRecipeImage = document.createElement("div");
+        singleRecipeImage.classList.toggle("recipeImage");
+        newSingleRecipe.appendChild(singleRecipeImage);
+        const recipeImage = document.createElement("img");
+        recipeImage.classList.toggle("recipeImage");
+        singleRecipeImage.appendChild(recipeImage);
+        const recipeName = document.createElement("div");
+        recipeName.classList.toggle("recipeName");
+        newSingleRecipe.appendChild(recipeName);
+        const recipeNameText = document.createElement("p");
+        recipeName.appendChild(recipeNameText);
+        recipeNameText.textContent = element.recipeName;
+        recipeImage.src = element.recipePhotoSrc;
+      });
+    });
+  }, 1000);
 };
 dishSubmitButton.addEventListener("click", () => {
-  createDish(
-    dishName,
-    [...ingredients],
-    dishDescription,
-    [...tags],
-    uploadedImage
-  );
+  createDish(dishName, [...ingredients], dishDescription, [...uploadedTags]);
   clearNewDish();
-  createdRecipesDisplay();
+  setTimeout(() => {
+    createdRecipesDisplay();
+  }, 1200);
 });
 // SETTINGS
 // SETTINGS
 // SETTINGS
+const getFileExtension = (file) => {
+  const fileNameExtention = file.name.split(".");
+  const extention = fileNameExtention.slice(
+    fileNameExtention.length - 1,
+    fileNameExtention.length
+  );
+  return "." + extention[0];
+};
+async function imageUpload() {
+  const file = userPhotoInput.files.item(0);
+  const reader = new FileReader();
+  const storage = getStorage();
+  reader.readAsDataURL(file);
+  const storageRef = sRef(storage, "images/" + userID);
+  reader.addEventListener("load", () => {
+    const metaData = {
+      contentType: getFileExtension(file),
+    };
+    uploadBytesResumable(storageRef, file, metaData)
+      .catch((error) => {
+        const errorMessage = error.message;
+        alert(errorMessage);
+      })
+      .then(
+        getDownloadURL(storageRef).then((downloadURL) => {
+          update(ref(database, "users/" + userID, userID), {
+            photoURL: downloadURL,
+          });
+        })
+      );
+  });
+}
