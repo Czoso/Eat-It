@@ -5,6 +5,7 @@ import {
   set,
   get,
   ref,
+  remove as dbRemove,
   update,
   onValue,
 } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-database.js";
@@ -97,6 +98,7 @@ loginSubmitButton.addEventListener("click", (e) => {
           dishes = snapshot.val();
         }
       });
+      createdRecipesDisplay();
 
       loginDisappear();
       alert("Logged in!");
@@ -110,6 +112,7 @@ loginSubmitButton.addEventListener("click", (e) => {
 onAuthStateChanged(auth, (user) => {
   if (user) {
     userPhotoInput.addEventListener("change", imageUpload);
+
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/firebase.User
     const uid = user.uid;
@@ -208,8 +211,6 @@ const appearing = (content) => {
   }, animationDuration);
 };
 newDishButton.addEventListener("click", () => {
-  console.log("1");
-  console.log("3");
   newRecipeContent.forEach(changingNewDishContent);
   newRecipeContent[0].style.display = "flex";
   disappearing(mainMenu);
@@ -256,23 +257,41 @@ const yourRecipeOverviewDeleteButton = document.querySelector(
   "div.yourRecipeOverviewDeleteButton"
 );
 let dishToDelete;
+let dishGetCounter = 4;
 yourRecipesExitButton.addEventListener("click", () => {
   disappearing(yourRecipesContent);
   appearing(mainMenu);
 });
 yourRecipeOverviewDeleteButton.addEventListener("click", () => {
-  disappearing(yourRecipesOverview);
-  appearing(yourRecipesBrowser);
-  dishes.splice(createdRecipes.indexOf(dishToDelete), 1);
-  createdRecipes.splice(createdRecipes.indexOf(dishToDelete), 1);
+  dishGetCounter = 0;
   dishToDelete.remove();
+  dbRemove(
+    ref(
+      database,
+      "users/" +
+        userID +
+        "/dishes/dishes/" +
+        createdRecipes.indexOf(dishToDelete)
+    )
+  ).then(() => {
+    const newDishesList = [...dishes.dishes].filter((e) => {
+      console.log(`${e} ma typ ${typeof e}`);
+      return e !== undefined;
+    });
+    console.log(newDishesList);
+    update(ref(database, "users/" + userID + "/dishes"), {
+      dishes: newDishesList,
+    });
+    disappearing(yourRecipesOverview);
+    appearing(yourRecipesBrowser);
+  });
+  createdRecipes.splice(createdRecipes.indexOf(dishToDelete), 1);
 });
 yourRecipeOverviewExitButton.addEventListener("click", () => {
   disappearing(yourRecipesOverview);
   appearing(yourRecipesBrowser);
 });
 const recipeOverviewAppearing = function () {
-  console.log("aktywacja");
   disappearing(yourRecipesBrowser);
   appearing(yourRecipesOverview);
   dishToDelete = this;
@@ -307,7 +326,6 @@ const recipeOverviewAppearing = function () {
   yourRecipeOverviewDescription.textContent =
     dishes.dishes[createdRecipes.indexOf(this)].recipeDescription;
   const yourRecipeTagsDisplay = (element, index) => {
-    console.log(element);
     if (element == true) {
       yourRecipeOverviewTagImage[index].style.display = "block";
     }
@@ -416,6 +434,7 @@ const dish = {
   recipePhotoSrc: "",
 };
 const createDish = function (name, ingredients, description, tags) {
+  dishGetCounter = 0;
   let photo = "";
   async function dishImageUpload() {
     const file = photoInput.files.item(0);
@@ -450,12 +469,12 @@ const createDish = function (name, ingredients, description, tags) {
             get(ref(database, "users/" + userID + "/dishes")).then(
               (snapshot) => {
                 if (snapshot.exists()) {
-                  console.log("update");
+                  dishGetCounter = 4;
                   update(ref(database, "users/" + userID + "/dishes"), {
                     dishes: [...dishes.dishes, newDishObject],
                   });
                 } else {
-                  console.log("set");
+                  dishGetCounter = 4;
                   set(ref(database, "users/" + userID + "/dishes"), {
                     dishes: new Array(newDishObject),
                   });
@@ -463,7 +482,7 @@ const createDish = function (name, ingredients, description, tags) {
               }
             );
           });
-      }, 800);
+      }, 1000);
     });
   }
   dishImageUpload();
@@ -493,7 +512,6 @@ const indexCheck = function (element, index) {
 const newDishContentComeBack = () => {
   const interval = setInterval(() => {
     if (activeMenuIndex > 0) {
-      console.log(activeMenuIndex);
       changingMenu("previous");
     } else {
       window.clearInterval(interval);
@@ -506,7 +524,6 @@ const changingNewDishContent = function (element, index) {
 };
 const changingMenu = function (direction) {
   if (animationStatus) {
-    console.log(activeMenuIndex);
     animationStatus = false;
     if (direction == "next") {
       if (activeMenuIndex < 5) {
@@ -872,44 +889,45 @@ const ingredientsOverviewDisplay = function (element, index) {
   overviewIngredientsList.appendChild(overviewIngredient);
 };
 const createdRecipesDisplay = () => {
-  console.log("created");
-  createdRecipes.forEach((element) => {
-    element.remove();
-  });
-  createdRecipes.splice(0, createdRecipes.length);
-  get(ref(database, "users/" + userID + "/dishes")).then((snapshot) => {
-    setTimeout(() => {
-      console.log(dishes.dishes);
-      dishes.dishes.forEach((element) => {
-        console.log("leci");
-        const newSingleRecipe = document.createElement("div");
-        newSingleRecipe.classList.toggle("singleRecipe");
-        recipeList.appendChild(newSingleRecipe);
-        newSingleRecipe.addEventListener("click", recipeOverviewAppearing);
-        createdRecipes.push(newSingleRecipe);
-        const singleRecipeImage = document.createElement("div");
-        singleRecipeImage.classList.toggle("recipeImage");
-        newSingleRecipe.appendChild(singleRecipeImage);
-        const recipeImage = document.createElement("img");
-        recipeImage.classList.toggle("recipeImage");
-        singleRecipeImage.appendChild(recipeImage);
-        const recipeName = document.createElement("div");
-        recipeName.classList.toggle("recipeName");
-        newSingleRecipe.appendChild(recipeName);
-        const recipeNameText = document.createElement("p");
-        recipeName.appendChild(recipeNameText);
-        recipeNameText.textContent = element.recipeName;
-        recipeImage.src = element.recipePhotoSrc;
+  const interval = setInterval(() => {
+    if (dishGetCounter < 6) {
+      dishGetCounter++;
+      createdRecipes.forEach((element) => {
+        element.remove();
       });
-    });
+      createdRecipes.splice(0, createdRecipes.length);
+      if (typeof dishes.dishes !== "undefined") {
+        dishes.dishes.forEach((element) => {
+          const newSingleRecipe = document.createElement("div");
+          newSingleRecipe.classList.toggle("singleRecipe");
+          recipeList.appendChild(newSingleRecipe);
+          newSingleRecipe.addEventListener("click", recipeOverviewAppearing);
+          createdRecipes.push(newSingleRecipe);
+          const singleRecipeImage = document.createElement("div");
+          singleRecipeImage.classList.toggle("recipeImage");
+          newSingleRecipe.appendChild(singleRecipeImage);
+          const recipeImage = document.createElement("img");
+          recipeImage.classList.toggle("recipeImage");
+          singleRecipeImage.appendChild(recipeImage);
+          const recipeName = document.createElement("div");
+          recipeName.classList.toggle("recipeName");
+          newSingleRecipe.appendChild(recipeName);
+          const recipeNameText = document.createElement("p");
+          recipeName.appendChild(recipeNameText);
+          recipeNameText.textContent = element.recipeName;
+          recipeImage.src = element.recipePhotoSrc;
+        });
+      }
+    } else {
+      window.clearInterval(interval);
+      dishGetCounter--;
+    }
   }, 1000);
 };
 dishSubmitButton.addEventListener("click", () => {
   createDish(dishName, [...ingredients], dishDescription, [...uploadedTags]);
   clearNewDish();
-  setTimeout(() => {
-    createdRecipesDisplay();
-  }, 1200);
+  createdRecipesDisplay();
   newDishContentComeBack();
 });
 // SETTINGS
@@ -933,17 +951,12 @@ async function imageUpload() {
     const metaData = {
       contentType: getFileExtension(file),
     };
-    uploadBytesResumable(storageRef, file, metaData)
-      .catch((error) => {
-        const errorMessage = error.message;
-        alert(errorMessage);
+    uploadBytesResumable(storageRef, file, metaData).then(
+      getDownloadURL(storageRef).then((downloadURL) => {
+        update(ref(database, "users/" + userID, userID), {
+          photoURL: downloadURL,
+        });
       })
-      .then(
-        getDownloadURL(storageRef).then((downloadURL) => {
-          update(ref(database, "users/" + userID, userID), {
-            photoURL: downloadURL,
-          });
-        })
-      );
+    );
   });
 }
