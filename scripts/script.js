@@ -279,12 +279,9 @@ yourRecipeOverviewDeleteButton.addEventListener("click", () => {
           createdRecipes.indexOf(dishToDelete)
       )
     ).then(() => {
-      console.log(dishes.dishes);
       const newDishesList = [...dishes.dishes].filter((e) => {
-        console.log(`${e} ma typ ${typeof e}`);
         return e !== undefined;
       });
-      console.log(newDishesList);
       update(ref(database, "users/" + userID + "/dishes"), {
         dishes: newDishesList,
       });
