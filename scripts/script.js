@@ -265,26 +265,33 @@ yourRecipesExitButton.addEventListener("click", () => {
 yourRecipeOverviewDeleteButton.addEventListener("click", () => {
   dishGetCounter = 0;
   dishToDelete.remove();
-  dbRemove(
-    ref(
-      database,
-      "users/" +
-        userID +
-        "/dishes/dishes/" +
-        createdRecipes.indexOf(dishToDelete)
-    )
-  ).then(() => {
-    const newDishesList = [...dishes.dishes].filter((e) => {
-      console.log(`${e} ma typ ${typeof e}`);
-      return e !== undefined;
-    });
-    console.log(newDishesList);
-    update(ref(database, "users/" + userID + "/dishes"), {
-      dishes: newDishesList,
-    });
+  if (dishes.dishes.length == 1) {
+    dbRemove(ref(database, "users/" + userID + "/dishes/dishes"));
     disappearing(yourRecipesOverview);
     appearing(yourRecipesBrowser);
-  });
+  } else {
+    dbRemove(
+      ref(
+        database,
+        "users/" +
+          userID +
+          "/dishes/dishes/" +
+          createdRecipes.indexOf(dishToDelete)
+      )
+    ).then(() => {
+      console.log(dishes.dishes);
+      const newDishesList = [...dishes.dishes].filter((e) => {
+        console.log(`${e} ma typ ${typeof e}`);
+        return e !== undefined;
+      });
+      console.log(newDishesList);
+      update(ref(database, "users/" + userID + "/dishes"), {
+        dishes: newDishesList,
+      });
+      disappearing(yourRecipesOverview);
+      appearing(yourRecipesBrowser);
+    });
+  }
   createdRecipes.splice(createdRecipes.indexOf(dishToDelete), 1);
 });
 yourRecipeOverviewExitButton.addEventListener("click", () => {
