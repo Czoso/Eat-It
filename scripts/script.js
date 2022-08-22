@@ -44,11 +44,13 @@ const auth = getAuth();
 const user = auth.currentUser;
 let loggedUserPhoto = "";
 let userID;
+let currentUsername;
 const userPhoto = document.querySelector("img.userPhoto");
 const userPhotoLabel = document.querySelector("label.userPhotoInput");
 const userPhotoInput = document.querySelector("input.userPhotoInput");
 const signinSubmitButton = document.querySelector("div.signinSubmitButton");
 const loginSubmitButton = document.querySelector("div.loginSubmitButton");
+const userNameDisplayer = document.querySelector("div.userNameDisplayer");
 signinSubmitButton.addEventListener("click", (e) => {
   let email = document.querySelector("input.eMailSignin").value;
   let password = document.querySelector("input.passwordSignin").value;
@@ -59,6 +61,7 @@ signinSubmitButton.addEventListener("click", (e) => {
       const user = userCredential.user;
       set(ref(database, "users/" + user.uid, user.uid), {
         email: email,
+        username: "Chilled Carrot",
         photoURL:
           "https://firebasestorage.googleapis.com/v0/b/eat-it-a4c55.appspot.com/o/images%2FdefaultPhoto.png?alt=media&token=91fbb604-6d71-4b27-bc83-d3b244731f10",
       });
@@ -97,6 +100,11 @@ loginSubmitButton.addEventListener("click", (e) => {
         if (snapshot.exists()) {
           dishes = snapshot.val();
         }
+      });
+      const usernameURLRef = ref(database, "users/" + userID + "/username");
+      onValue(usernameURLRef, (snapshot) => {
+        currentUsername = snapshot.val();
+        userNameDisplayer.textContent = snapshot.val();
       });
       createdRecipesDisplay();
 
@@ -937,6 +945,12 @@ dishSubmitButton.addEventListener("click", () => {
 // SETTINGS
 // SETTINGS
 // SETTINGS
+const settingsExitButton = document.querySelector("div.settingsExitButton");
+const userNameDisplayed = document.querySelector(".userNameDisplayed");
+const userNameDisplayedImage = document.querySelector("img.userNameDisplayed");
+const userNameEditedImage = document.querySelector("img.userNameEdited");
+const userNameEdited = document.querySelector(".userNameEdited");
+const usernameInput = document.querySelector("input.usernameInput");
 const getFileExtension = (file) => {
   const fileNameExtention = file.name.split(".");
   const extention = fileNameExtention.slice(
@@ -957,10 +971,32 @@ async function imageUpload() {
     };
     uploadBytesResumable(storageRef, file, metaData).then(
       getDownloadURL(storageRef).then((downloadURL) => {
-        update(ref(database, "users/" + userID, userID), {
-          photoURL: downloadURL,
-        });
+        setTimeout(() => {
+          update(ref(database, "users/" + userID, userID), {
+            photoURL: downloadURL,
+          });
+        }, 500);
       })
     );
   });
 }
+userNameDisplayedImage.addEventListener("click", () => {
+  userNameEdited.classList.toggle("active");
+  userNameDisplayed.classList.toggle("active");
+  userNameDisplayedImage.classList.toggle("active");
+  userNameEditedImage.classList.toggle("active");
+  usernameInput.value = userNameDisplayer.textContent;
+});
+userNameEditedImage.addEventListener("click", () => {
+  userNameEdited.classList.toggle("active");
+  userNameDisplayed.classList.toggle("active");
+  userNameDisplayedImage.classList.toggle("active");
+  userNameEditedImage.classList.toggle("active");
+  update(ref(database, "users/" + userID, userID), {
+    username: usernameInput.value,
+  });
+});
+settingsExitButton.addEventListener("click", () => {
+  appearing(mainMenu);
+  disappearing(settingsContent);
+});

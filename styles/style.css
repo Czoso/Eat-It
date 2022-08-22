@@ -930,22 +930,66 @@ div.dishSubmit {
 /* SETTINGS */
 div.settingsContent {
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   min-height: 100vh;
   display: none;
   flex-direction: column;
   flex-grow: 1;
+  gap: 30px;
   width: 100vw;
 }
 label.userPhotoInput {
   width: 60vw;
   height: 60vw;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
   border: #6a8c13 solid 4px;
   border-radius: 50%;
   margin: 10px 0;
 }
 input.userPhotoInput {
   display: none;
+}
+div.usernameChanger {
+  display: flex;
+  flex-direction: row;
+  width: 80vw;
+  justify-content: space-between;
+  height: 30px;
+}
+div.userNameDisplayer {
+  display: none;
+  font-size: 3rem;
+  color: #3f520b;
+  text-shadow: #ada 1px 1px 5px;
+}
+.userNameEdited {
+  display: none;
+}
+input.usernameInput {
+  background-color: #6a8c13;
+  width: 60vw;
+  font-size: 3rem;
+  color: #3f520b;
+  text-shadow: #ada 1px 1px 5px;
+  cursor: text;
+}
+img.usernameImage {
+  display: none;
+  width: 30px;
+  height: 30px;
+}
+div.settingsExitButton {
+  text-align: center;
+  width: 20vw;
+  height: 20vw;
+  margin: 10px 0;
+}
+img.settingsExitImage {
+  text-align: center;
+  width: 20vw;
+  height: 20vw;
+}
+div.usernameChanger .active {
+  display: flex;
 }
