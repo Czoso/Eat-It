@@ -233,9 +233,6 @@ div.yourRecipesExitButton {
   height: 20vw;
   box-shadow: #000 1px 1px 5px;
 }
-img.yourRecipesExitImage {
-  width: 100%;
-}
 div.yourRecipesBrowser h1 {
   text-align: center;
   font-size: 3rem;
@@ -394,13 +391,17 @@ img.yourRecipesExitImage {
   height: 20vw;
   flex-grow: 1;
 }
-img.yourRecipesDeleteImage {
+img.yourRecipeButtonImage {
   display: flex;
   text-align: center;
   margin-top: 10px;
+  margin-bottom: 10px;
   width: 20vw;
   height: 20vw;
   flex-grow: 1;
+}
+div.yourRecipeOverviewShareButton img.active {
+  box-shadow: #bb2 2px 2px 10px;
 }
 /*<---------NEW DISH----------->*/
 /*<---------NEW DISH----------->*/

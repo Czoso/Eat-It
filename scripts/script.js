@@ -45,6 +45,7 @@ const user = auth.currentUser;
 let loggedUserPhoto = "";
 let userID;
 let currentUsername;
+let uploadedDishes;
 const userPhoto = document.querySelector("img.userPhoto");
 const userPhotoLabel = document.querySelector("label.userPhotoInput");
 const userPhotoInput = document.querySelector("input.userPhotoInput");
@@ -105,6 +106,12 @@ loginSubmitButton.addEventListener("click", (e) => {
       onValue(usernameURLRef, (snapshot) => {
         currentUsername = snapshot.val();
         userNameDisplayer.textContent = snapshot.val();
+      });
+      const uploadedDishesRef = ref(database, "dishes/uploadedDishes");
+      onValue(uploadedDishesRef, (snapshot) => {
+        if (snapshot.exists()) {
+          uploadedDishes = snapshot.val();
+        }
       });
       createdRecipesDisplay();
 
@@ -264,8 +271,18 @@ const yourRecipeOverviewExitButton = document.querySelector(
 const yourRecipeOverviewDeleteButton = document.querySelector(
   "div.yourRecipeOverviewDeleteButton"
 );
+const yourRecipeOverviewShareButton = document.querySelector(
+  "div.yourRecipeOverviewShareButton"
+);
 let dishToDelete;
 let dishGetCounter = 4;
+let checkIfListener = false;
+const dishToUpload = {
+  dishRecipe: [],
+  creatorUsername: "",
+  creatorID: "",
+  creatorPhoto: "",
+};
 yourRecipesExitButton.addEventListener("click", () => {
   disappearing(yourRecipesContent);
   appearing(mainMenu);
@@ -303,7 +320,99 @@ yourRecipeOverviewExitButton.addEventListener("click", () => {
   disappearing(yourRecipesOverview);
   appearing(yourRecipesBrowser);
 });
+
 const recipeOverviewAppearing = function () {
+  const buttonToRemove = document.querySelector("img.yourRecipesShareImage");
+  if (buttonToRemove !== null) {
+    buttonToRemove.remove();
+  }
+  const yourRecipesShareImage = document.createElement("img");
+  yourRecipesShareImage.classList.toggle("yourRecipesShareImage");
+  yourRecipesShareImage.classList.toggle("yourRecipeButtonImage");
+  yourRecipesShareImage.src = "images/share.png";
+  yourRecipeOverviewShareButton.appendChild(yourRecipesShareImage);
+  get(
+    ref(
+      database,
+      "users/" + userID + "/dishes/dishes/" + createdRecipes.indexOf(this)
+    )
+  ).then((snapshot) => {
+    if (snapshot.val().recipeShare == true) {
+      yourRecipesShareImage.classList.add("active");
+    } else {
+      yourRecipesShareImage.classList.remove("active");
+    }
+  });
+  const sharingRecipe = () => {
+    checkIfListener = true;
+    yourRecipesShareImage.classList.toggle("active");
+    if (yourRecipesShareImage.classList.contains("active")) {
+      update(
+        ref(
+          database,
+          "users/" + userID + "/dishes/dishes/" + createdRecipes.indexOf(this)
+        ),
+        {
+          recipeShare: true,
+        }
+      );
+      get(ref(database, "dishes")).then((snapshot) => {
+        let newDishUpload = Object.create(dishToUpload);
+        newDishUpload = [
+          dishes.dishes[createdRecipes.indexOf(this)],
+          currentUsername,
+          userID,
+          loggedUserPhoto,
+        ];
+        if (snapshot.exists()) {
+          get(ref(database, "dishes/uploadedDishes")).then((snapshot) => {});
+          update(ref(database, "dishes"), {
+            uploadedDishes: [...uploadedDishes, newDishUpload],
+          });
+        } else {
+          set(ref(database, "dishes"), {
+            uploadedDishes: new Array(newDishUpload),
+          });
+        }
+      });
+    } else {
+      update(
+        ref(
+          database,
+          "users/" + userID + "/dishes/dishes/" + createdRecipes.indexOf(this)
+        ),
+        {
+          recipeShare: false,
+        }
+      );
+      uploadedDishes.forEach((e, index) => {
+        if (
+          e[0].recipeName ==
+          dishes.dishes[createdRecipes.indexOf(this)].recipeName
+        ) {
+          if (e[2] == userID) {
+            if (uploadedDishes.length == 1) {
+              dbRemove(ref(database, "dishes"));
+            } else {
+              dbRemove(ref(database, "dishes/uploadedDishes/" + index)).then(
+                () => {
+                  const newUploadedDishesList = [...uploadedDishes].filter(
+                    (e) => {
+                      return e !== undefined;
+                    }
+                  );
+                  update(ref(database, "dishes"), {
+                    uploadedDishes: newUploadedDishesList,
+                  });
+                }
+              );
+            }
+          }
+        }
+      });
+    }
+  };
+  yourRecipesShareImage.addEventListener("click", sharingRecipe);
   disappearing(yourRecipesBrowser);
   appearing(yourRecipesOverview);
   dishToDelete = this;
@@ -444,6 +553,7 @@ const dish = {
   recipeDescription: "",
   recipeTags: [],
   recipePhotoSrc: "",
+  recipeShare: false,
 };
 const createDish = function (name, ingredients, description, tags) {
   dishGetCounter = 0;
@@ -478,6 +588,7 @@ const createDish = function (name, ingredients, description, tags) {
             newDishObject.recipeDescription = description;
             newDishObject.recipeTags = tags;
             newDishObject.recipePhotoSrc = photo;
+            newDishObject.recipeShare = false;
             get(ref(database, "users/" + userID + "/dishes")).then(
               (snapshot) => {
                 if (snapshot.exists()) {
