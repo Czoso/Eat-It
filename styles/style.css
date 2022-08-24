@@ -5,7 +5,7 @@
 }
 html {
   font-size: 10px;
-  font-family: Arial, sans-serif;
+  font-family: DynaPuff, Arial, sans-serif;
 }
 *::selection {
   background-color: violet;
@@ -926,6 +926,28 @@ div.dishSubmit {
   margin-right: 10%;
   margin-bottom: 5%;
 }
+div.alert {
+  position: fixed;
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 0);
+  width: 280px;
+  height: 80px;
+  background-color: #cfc;
+  border: 4px solid #6a8c13;
+  border-radius: 10px;
+  z-index: 1;
+}
+div.alert p {
+  font-size: 3rem;
+  color: #3f520b;
+  text-shadow: #ada 1px 1px 5px;
+  text-align: center;
+}
 /* BROWSER */
 /* BROWSER */
 /* BROWSER */
@@ -964,7 +986,7 @@ div.browserExitButton {
 }
 div.browserContent h1 {
   text-align: center;
-  font-size: 3rem;
+  font-size: 2.8rem;
   padding: 15px;
   text-decoration: underline;
   text-shadow: white 1px 1px 5px;

@@ -52,6 +52,8 @@ const userPhotoInput = document.querySelector("input.userPhotoInput");
 const signinSubmitButton = document.querySelector("div.signinSubmitButton");
 const loginSubmitButton = document.querySelector("div.loginSubmitButton");
 const userNameDisplayer = document.querySelector("div.userNameDisplayer");
+const signinAlert = document.querySelector("div.signinAlert");
+const loginAlert = document.querySelector("div.loginAlert");
 signinSubmitButton.addEventListener("click", (e) => {
   let email = document.querySelector("input.eMailSignin").value;
   let password = document.querySelector("input.passwordSignin").value;
@@ -69,7 +71,7 @@ signinSubmitButton.addEventListener("click", (e) => {
       set(ref(database, "users/" + user.uid + "/dishes"), {
         dishes: [],
       });
-      alert("User created! Please log in");
+      alertAnimation(signinAlert);
       // ...
     })
     .catch((error) => {
@@ -116,7 +118,7 @@ loginSubmitButton.addEventListener("click", (e) => {
       createdRecipesDisplay();
       uploadedRecipesDisplay();
       loginDisappear();
-      alert("Logged in!");
+      alertAnimation(loginAlert);
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -207,6 +209,8 @@ const browser = document.querySelector("div.browser");
 const browserButton = document.querySelector("div.browserButton");
 const settingsContent = document.querySelector("div.settingsContent");
 const settingsButton = document.querySelector("div.settingsButton");
+const alertAnimationDuration = 750;
+const alertDisplayTime = 1500;
 const menuDisappear = [
   { transform: "translateY(0)", opacity: "100%" },
   { transform: "translateY(20px)", opacity: "0" },
@@ -226,6 +230,26 @@ const appearing = (content) => {
     content.style.display = "flex";
     content.animate(menuAppear, animationDuration);
   }, animationDuration);
+};
+const alertAnimation = (content) => {
+  const alertAppear = [
+    {
+      transform: "translateX(-200%)",
+    },
+    { transform: "translateX(-50%)" },
+  ];
+  const alertDisappear = [
+    { transform: "translateX(-50%)" },
+    { transform: "translateX(200%)" },
+  ];
+  content.style.display = "flex";
+  content.animate(alertAppear, alertAnimationDuration);
+  setTimeout(() => {
+    content.animate(alertDisappear, alertAnimationDuration);
+    setTimeout(() => {
+      content.style.display = "none";
+    }, alertAnimationDuration - 100);
+  }, alertAnimationDuration + alertDisplayTime);
 };
 newDishButton.addEventListener("click", () => {
   newRecipeContent.forEach(changingNewDishContent);
@@ -280,6 +304,12 @@ const yourRecipeOverviewDeleteButton = document.querySelector(
 const yourRecipeOverviewShareButton = document.querySelector(
   "div.yourRecipeOverviewShareButton"
 );
+const recipeSharedAlert = document.querySelector("div.recipeSharedAlert");
+const recipeUnsharedAlert = document.querySelector("div.recipeUnsharedAlert");
+const recipeDeletedAlert = document.querySelector("div.recipeDeletedAlert");
+const recipeUnshareDeletedAlert = document.querySelector(
+  "div.recipeUnshareDeletedAlert"
+);
 let dishToDelete;
 let dishGetCounter = 4;
 let uploadGetCounter = 4;
@@ -294,33 +324,38 @@ yourRecipesExitButton.addEventListener("click", () => {
   appearing(mainMenu);
 });
 yourRecipeOverviewDeleteButton.addEventListener("click", () => {
-  dishGetCounter = 0;
-  dishToDelete.remove();
-  if (dishes.dishes.length == 1) {
-    dbRemove(ref(database, "users/" + userID + "/dishes/dishes"));
-    disappearing(yourRecipesOverview);
-    appearing(yourRecipesBrowser);
-  } else {
-    dbRemove(
-      ref(
-        database,
-        "users/" +
-          userID +
-          "/dishes/dishes/" +
-          createdRecipes.indexOf(dishToDelete)
-      )
-    ).then(() => {
-      const newDishesList = [...dishes.dishes].filter((e) => {
-        return e !== undefined;
-      });
-      update(ref(database, "users/" + userID + "/dishes"), {
-        dishes: newDishesList,
-      });
+  if (!dishes.dishes[createdRecipes.indexOf(dishToDelete)].recipeShare) {
+    dishGetCounter = 0;
+    dishToDelete.remove();
+    if (dishes.dishes.length == 1) {
+      dbRemove(ref(database, "users/" + userID + "/dishes/dishes"));
       disappearing(yourRecipesOverview);
       appearing(yourRecipesBrowser);
-    });
+    } else {
+      dbRemove(
+        ref(
+          database,
+          "users/" +
+            userID +
+            "/dishes/dishes/" +
+            createdRecipes.indexOf(dishToDelete)
+        )
+      ).then(() => {
+        alertAnimation(recipeDeletedAlert);
+        const newDishesList = [...dishes.dishes].filter((e) => {
+          return e !== undefined;
+        });
+        update(ref(database, "users/" + userID + "/dishes"), {
+          dishes: newDishesList,
+        });
+        disappearing(yourRecipesOverview);
+        appearing(yourRecipesBrowser);
+      });
+    }
+    createdRecipes.splice(createdRecipes.indexOf(dishToDelete), 1);
+  } else {
+    alertAnimation(recipeUnshareDeletedAlert);
   }
-  createdRecipes.splice(createdRecipes.indexOf(dishToDelete), 1);
 });
 yourRecipeOverviewExitButton.addEventListener("click", () => {
   disappearing(yourRecipesOverview);
@@ -351,7 +386,6 @@ const recipeOverviewAppearing = function () {
   });
   const sharingRecipe = () => {
     uploadedRecipesDisplay();
-    checkIfListener = true;
     yourRecipesShareImage.classList.toggle("active");
     if (yourRecipesShareImage.classList.contains("active")) {
       update(
@@ -364,6 +398,9 @@ const recipeOverviewAppearing = function () {
         }
       );
       get(ref(database, "dishes")).then((snapshot) => {
+        recipeUnsharedAlert.style.display = "none";
+
+        alertAnimation(recipeSharedAlert);
         let newDishUpload = Object.create(dishToUpload);
         newDishUpload = [
           dishes.dishes[createdRecipes.indexOf(this)],
@@ -394,6 +431,9 @@ const recipeOverviewAppearing = function () {
           recipeShare: false,
         }
       ).then(() => {
+        recipeSharedAlert.style.display = "none";
+
+        alertAnimation(recipeUnsharedAlert);
         uploadGetCounter = 4;
       });
       uploadedDishes.forEach((e, index) => {
@@ -516,6 +556,7 @@ const overviewIngredientsList = document.querySelector(
 );
 const overviewDescription = document.querySelector("div.overviewDescription");
 const dishSubmitButton = document.querySelector("div.dishSubmit");
+const newDishAlert = document.querySelector("div.newDishAlert");
 
 let deleteButtons;
 let deletedIngredient;
@@ -1066,6 +1107,7 @@ dishSubmitButton.addEventListener("click", () => {
   clearNewDish();
   createdRecipesDisplay();
   newDishContentComeBack();
+  alertAnimation(newDishAlert);
 });
 // BROWSER
 // BROWSER
@@ -1201,6 +1243,8 @@ const userNameDisplayedImage = document.querySelector("img.userNameDisplayed");
 const userNameEditedImage = document.querySelector("img.userNameEdited");
 const userNameEdited = document.querySelector(".userNameEdited");
 const usernameInput = document.querySelector("input.usernameInput");
+const photoChangedAlert = document.querySelector("div.photoChangedAlert");
+const usernameChangedAlert = document.querySelector("div.usernameChangedAlert");
 const getFileExtension = (file) => {
   const fileNameExtention = file.name.split(".");
   const extention = fileNameExtention.slice(
@@ -1227,6 +1271,7 @@ async function imageUpload() {
           console.log(typeof downloadURL);
           if (intervalCounter < 6) {
             if (typeof downloadURL == "string") {
+              alertAnimation(photoChangedAlert);
               console.log("exists");
               update(ref(database, "users/" + userID, userID), {
                 photoURL: downloadURL,
@@ -1259,6 +1304,7 @@ userNameEditedImage.addEventListener("click", () => {
   update(ref(database, "users/" + userID, userID), {
     username: usernameInput.value,
   });
+  alertAnimation(usernameChangedAlert);
 });
 settingsExitButton.addEventListener("click", () => {
   appearing(mainMenu);
