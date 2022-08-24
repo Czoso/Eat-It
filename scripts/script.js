@@ -114,7 +114,7 @@ loginSubmitButton.addEventListener("click", (e) => {
         }
       });
       createdRecipesDisplay();
-
+      uploadedRecipesDisplay();
       loginDisappear();
       alert("Logged in!");
     })
@@ -203,6 +203,8 @@ const newDishButton = document.querySelector("div.newDishButton");
 const yourRecipesButton = document.querySelector("div.yourDishesButton");
 const newDish = document.querySelector("div.newDish");
 const yourRecipesContent = document.querySelector("div.yourRecipes");
+const browser = document.querySelector("div.browser");
+const browserButton = document.querySelector("div.browserButton");
 const settingsContent = document.querySelector("div.settingsContent");
 const settingsButton = document.querySelector("div.settingsButton");
 const menuDisappear = [
@@ -235,6 +237,10 @@ newDishButton.addEventListener("click", () => {
 yourRecipesButton.addEventListener("click", () => {
   disappearing(mainMenu);
   appearing(yourRecipesContent);
+});
+browserButton.addEventListener("click", () => {
+  disappearing(mainMenu);
+  appearing(browser);
 });
 settingsButton.addEventListener("click", () => {
   disappearing(mainMenu);
@@ -276,6 +282,7 @@ const yourRecipeOverviewShareButton = document.querySelector(
 );
 let dishToDelete;
 let dishGetCounter = 4;
+let uploadGetCounter = 4;
 let checkIfListener = false;
 const dishToUpload = {
   dishRecipe: [],
@@ -344,6 +351,7 @@ const recipeOverviewAppearing = function () {
     }
   });
   const sharingRecipe = () => {
+    uploadedRecipesDisplay();
     checkIfListener = true;
     yourRecipesShareImage.classList.toggle("active");
     if (yourRecipesShareImage.classList.contains("active")) {
@@ -368,6 +376,8 @@ const recipeOverviewAppearing = function () {
           get(ref(database, "dishes/uploadedDishes")).then((snapshot) => {});
           update(ref(database, "dishes"), {
             uploadedDishes: [...uploadedDishes, newDishUpload],
+          }).then(() => {
+            uploadGetCounter = 4;
           });
         } else {
           set(ref(database, "dishes"), {
@@ -384,7 +394,9 @@ const recipeOverviewAppearing = function () {
         {
           recipeShare: false,
         }
-      );
+      ).then(() => {
+        uploadGetCounter = 4;
+      });
       uploadedDishes.forEach((e, index) => {
         if (
           e[0].recipeName ==
@@ -403,6 +415,8 @@ const recipeOverviewAppearing = function () {
                   );
                   update(ref(database, "dishes"), {
                     uploadedDishes: newUploadedDishesList,
+                  }).then(() => {
+                    uploadGetCounter = 4;
                   });
                 }
               );
@@ -517,6 +531,7 @@ let animationStatus = true;
 let dishes = [];
 let uploadedTags = [];
 const createdRecipes = [];
+const uploadedRecipes = [];
 const activatedTags = [];
 const animationDuration = 200;
 const capitalizeFirstLetter = (string) => {
@@ -1053,6 +1068,131 @@ dishSubmitButton.addEventListener("click", () => {
   createdRecipesDisplay();
   newDishContentComeBack();
 });
+// BROWSER
+// BROWSER
+// BROWSER
+const browserExitButton = document.querySelector("div.browserExitButton");
+const browserList = document.querySelector("div.browserList");
+const browserContent = document.querySelector("div.browserContent");
+const browserOverview = document.querySelector("div.browserOverview");
+const creatorPhotoImage = document.querySelector("img.creatorPhotoImage");
+const creatorUsername = document.querySelector("div.creatorUsername");
+const browserOverviewTagImage = Array.from(
+  document.querySelectorAll("img.browserOverviewTagImage")
+);
+const browserOverviewDishName = document.querySelector(
+  "div.browserOverviewDishName h1"
+);
+const browserOverviewIngredients = document.querySelector(
+  "div.browserOverviewIngredients"
+);
+const browserOverviewDescription = document.querySelector(
+  "div.browserOverviewDescription"
+);
+const browserOverviewPhotoDisplay = document.querySelector(
+  "div.browserOverviewPhotoDisplay img"
+);
+const browserOverviewExitButton = document.querySelector(
+  "div.browserOverviewExitButton"
+);
+browserOverviewExitButton.addEventListener("click", () => {
+  disappearing(browserOverview);
+  appearing(browserContent);
+});
+browserExitButton.addEventListener("click", () => {
+  disappearing(browser);
+  appearing(mainMenu);
+});
+const browserOverviewAppearing = function () {
+  disappearing(browserContent);
+  appearing(browserOverview);
+  creatorPhotoImage.src = uploadedDishes[uploadedRecipes.indexOf(this)][3];
+  creatorUsername.textContent =
+    uploadedDishes[uploadedRecipes.indexOf(this)][1] + "'s";
+  browserOverviewTagImage.forEach((element) => {
+    element.style.display = "none";
+  });
+  console.log(this);
+  console.log(uploadedRecipes);
+  console.log(uploadedRecipes.indexOf(this));
+  console.log(uploadedDishes[uploadedRecipes.indexOf(this)][0]);
+  console.log(uploadedDishes[uploadedRecipes.indexOf(this)][0].recipeName);
+  browserOverviewDishName.textContent = capitalizeFirstLetter(
+    uploadedDishes[uploadedRecipes.indexOf(this)][0].recipeName
+  );
+  const browserIngredientsOverviewDelete = () => {
+    const ingredientsToDelete = Array.from(
+      document.querySelectorAll("div.browserOverviewIngredient")
+    );
+    ingredientsToDelete.forEach((element) => {
+      if (element.classList.contains("browserOverviewIngredient")) {
+        element.remove();
+      }
+    });
+  };
+  browserIngredientsOverviewDelete();
+  const browserIngredientsOverviewDisplay = function (element) {
+    const browserIngredient = document.createElement("div");
+    browserIngredient.classList.add("browserOverviewIngredient");
+    browserIngredient.textContent = `${element.name} - ${element.quantity} ${element.type}`;
+    browserOverviewIngredients.appendChild(browserIngredient);
+  };
+
+  uploadedDishes[uploadedRecipes.indexOf(this)][0].recipeIngredients.forEach(
+    browserIngredientsOverviewDisplay
+  );
+  browserOverviewDescription.textContent =
+    uploadedDishes[uploadedRecipes.indexOf(this)][0].recipeDescription;
+  const browserTagsDisplay = (element, index) => {
+    if (element == true) {
+      browserOverviewTagImage[index].style.display = "block";
+    }
+  };
+  uploadedDishes[uploadedRecipes.indexOf(this)][0].recipeTags.forEach(
+    browserTagsDisplay
+  );
+  browserOverviewPhotoDisplay.src =
+    uploadedDishes[uploadedRecipes.indexOf(this)][0].recipePhotoSrc;
+};
+
+const uploadedRecipesDisplay = () => {
+  const interval = setInterval(() => {
+    if (uploadGetCounter < 6) {
+      uploadGetCounter++;
+      uploadedRecipes.forEach((element) => {
+        element.remove();
+      });
+      uploadedRecipes.splice(0, uploadedRecipes.length);
+      if (typeof uploadedDishes !== "undefined") {
+        console.log(uploadedDishes);
+        uploadedDishes.forEach((element) => {
+          const newUploadedRecipe = document.createElement("div");
+          newUploadedRecipe.classList.toggle("browserRecipe");
+          browserList.appendChild(newUploadedRecipe);
+          newUploadedRecipe.addEventListener("click", browserOverviewAppearing);
+          uploadedRecipes.push(newUploadedRecipe);
+          const browserRecipeImage = document.createElement("div");
+          browserRecipeImage.classList.toggle("browserImage");
+          newUploadedRecipe.appendChild(browserRecipeImage);
+          const recipeImage = document.createElement("img");
+          recipeImage.classList.toggle("browserImage");
+          browserRecipeImage.appendChild(recipeImage);
+          const recipeName = document.createElement("div");
+          recipeName.classList.toggle("browserName");
+          newUploadedRecipe.appendChild(recipeName);
+          const recipeNameText = document.createElement("p");
+          recipeName.appendChild(recipeNameText);
+          recipeNameText.textContent = element[0].recipeName;
+          recipeImage.src = element[0].recipePhotoSrc;
+        });
+      }
+    } else {
+      window.clearInterval(interval);
+      uploadGetCounter--;
+    }
+  }, 1000);
+};
+
 // SETTINGS
 // SETTINGS
 // SETTINGS
