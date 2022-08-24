@@ -283,7 +283,6 @@ const yourRecipeOverviewShareButton = document.querySelector(
 let dishToDelete;
 let dishGetCounter = 4;
 let uploadGetCounter = 4;
-let checkIfListener = false;
 const dishToUpload = {
   dishRecipe: [],
   creatorUsername: "",
@@ -1211,6 +1210,7 @@ const getFileExtension = (file) => {
   return "." + extention[0];
 };
 async function imageUpload() {
+  let intervalCounter = 0;
   const file = userPhotoInput.files.item(0);
   const reader = new FileReader();
   const storage = getStorage();
@@ -1222,10 +1222,23 @@ async function imageUpload() {
     };
     uploadBytesResumable(storageRef, file, metaData).then(
       getDownloadURL(storageRef).then((downloadURL) => {
-        setTimeout(() => {
-          update(ref(database, "users/" + userID, userID), {
-            photoURL: downloadURL,
-          });
+        const interval = setInterval(() => {
+          console.log(intervalCounter);
+          console.log(typeof downloadURL);
+          if (intervalCounter < 6) {
+            if (typeof downloadURL == "string") {
+              console.log("exists");
+              update(ref(database, "users/" + userID, userID), {
+                photoURL: downloadURL,
+              });
+              intervalCounter = 6;
+            } else {
+              console.log(" not exists");
+              intervalCounter++;
+            }
+          } else {
+            window.clearInterval(interval);
+          }
         }, 500);
       })
     );
