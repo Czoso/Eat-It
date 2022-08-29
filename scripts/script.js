@@ -234,13 +234,13 @@ const appearing = (content) => {
 const alertAnimation = (content) => {
   const alertAppear = [
     {
-      transform: "translateX(-200%)",
+      transform: "translateX(-125vw)",
     },
     { transform: "translateX(-50%)" },
   ];
   const alertDisappear = [
     { transform: "translateX(-50%)" },
-    { transform: "translateX(200%)" },
+    { transform: "translateX(100vw)" },
   ];
   content.style.display = "flex";
   content.animate(alertAppear, alertAnimationDuration);
@@ -257,6 +257,7 @@ newDishButton.addEventListener("click", () => {
   disappearing(mainMenu);
   appearing(newDish);
   animationStatus = true;
+  overviewSubmitDisplay();
 });
 yourRecipesButton.addEventListener("click", () => {
   disappearing(mainMenu);
@@ -557,6 +558,7 @@ const overviewIngredientsList = document.querySelector(
 const overviewDescription = document.querySelector("div.overviewDescription");
 const dishSubmitButton = document.querySelector("div.dishSubmit");
 const newDishAlert = document.querySelector("div.newDishAlert");
+const dishReminder = document.querySelector("div.dishReminder");
 
 let deleteButtons;
 let deletedIngredient;
@@ -670,12 +672,12 @@ const changingNextMenu = [
   { transform: "scale(1)" },
 ];
 const changingNextPage = [
-  { transform: "translateX(0)" },
-  { transform: "translateX(-50%)" },
+  { transform: "translateX(25%)" },
+  { transform: "translateX(-25%)" },
 ];
 const changingPreviousPage = [
-  { transform: "translateX(-50%)" },
-  { transform: "translateX(0)" },
+  { transform: "translateX(-25%)" },
+  { transform: "translateX(25%)" },
 ];
 const changingMenuTiming = {
   duration: animationDuration,
@@ -697,7 +699,6 @@ const newDishContentComeBack = () => {
   }, 200);
 };
 const changingNewDishContent = function (element, index) {
-  newRecipeContent[index];
   newRecipeContent[index].style.display = "none";
 };
 const changingMenu = function (direction) {
@@ -705,6 +706,8 @@ const changingMenu = function (direction) {
     animationStatus = false;
     if (direction == "next") {
       if (activeMenuIndex < 5) {
+        newDish.style.width = "200vw";
+        newDish.style.maxWidth = "1000px";
         navi[activeMenuIndex].textContent = " ";
         navi[activeMenuIndex + 1].textContent =
           menuContent[activeMenuIndex + 1];
@@ -713,9 +716,11 @@ const changingMenu = function (direction) {
         navi[activeMenuIndex + 1].animate(changingNextMenu, changingMenuTiming);
         newDishContent.style.animationFillMode = "forwards";
         setTimeout(() => {
+          newDish.style.width = "100vw";
+          newDish.style.maxWidth = "500px";
           changingNewDishContent("", activeMenuIndex - 1);
           animationStatus = true;
-        }, 200);
+        }, animationDuration - 10);
         newDishContent.animate(changingNextPage, changingMenuTiming);
         newRecipeContent[activeMenuIndex + 1].style.display = "flex";
       } else {
@@ -724,6 +729,8 @@ const changingMenu = function (direction) {
     }
     if (direction == "previous") {
       if (activeMenuIndex > 0) {
+        newDish.style.width = "200vw";
+        newDish.style.maxWidth = "1000px";
         navi[activeMenuIndex].textContent = " ";
         navi[activeMenuIndex - 1].textContent =
           menuContent[activeMenuIndex - 1];
@@ -732,9 +739,11 @@ const changingMenu = function (direction) {
         navi[activeMenuIndex - 1].animate(changingNextMenu, changingMenuTiming);
         newDishContent.style.animationFillMode = "forwards";
         setTimeout(() => {
+          newDish.style.width = "100vw";
+          newDish.style.maxWidth = "500px";
           changingNewDishContent("", activeMenuIndex + 1);
           animationStatus = true;
-        }, 200);
+        }, animationDuration - 10);
         newDishContent.animate(changingPreviousPage, changingMenuTiming);
         newRecipeContent[activeMenuIndex - 1].style.display = "flex";
       } else {
@@ -1040,13 +1049,22 @@ photoSubmitButton.addEventListener("click", () => {
 });
 //overview
 const overviewSubmitDisplay = () => {
+  dishReminder.style.display = "flex";
   if (!dishName) {
-    dishSubmitButton.style.display = "none";
-  } else if (!dishDescription) {
+    dishReminder.textContent = "Please add dish name";
     dishSubmitButton.style.display = "none";
   } else if (ingredients.length < 1) {
+    dishReminder.textContent = "Please add ingredients";
+    dishSubmitButton.style.display = "none";
+  } else if (!dishDescription) {
+    dishReminder.textContent = "Please add dish description";
+    dishSubmitButton.style.display = "none";
+  } else if (!uploadedImage) {
+    dishReminder.textContent = "Please add dish photo";
     dishSubmitButton.style.display = "none";
   } else {
+    dishReminder.textContent = "";
+    dishReminder.style.display = "none";
     dishSubmitButton.style.display = "block";
   }
 };
