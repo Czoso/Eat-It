@@ -209,6 +209,7 @@ const browser = document.querySelector("div.browser");
 const browserButton = document.querySelector("div.browserButton");
 const settingsContent = document.querySelector("div.settingsContent");
 const settingsButton = document.querySelector("div.settingsButton");
+const newDishContainer = document.querySelector("div.newDishContainer");
 const alertAnimationDuration = 750;
 const alertDisplayTime = 1500;
 const menuDisappear = [
@@ -255,7 +256,7 @@ newDishButton.addEventListener("click", () => {
   newRecipeContent.forEach(changingNewDishContent);
   newRecipeContent[0].style.display = "flex";
   disappearing(mainMenu);
-  appearing(newDish);
+  appearing(newDishContainer);
   animationStatus = true;
   overviewSubmitDisplay();
 });
@@ -278,6 +279,9 @@ const yourRecipesExitButton = document.querySelector(
   "div.yourRecipesExitButton"
 );
 const yourRecipesBrowser = document.querySelector("div.yourRecipesBrowser");
+const yourRecipeBrowserContent = document.querySelector(
+  "div.yourRecipeBrowserContent"
+);
 const recipeList = document.querySelector("div.recipesList");
 const yourRecipesOverview = document.querySelector("div.yourRecipeOverview");
 const yourRecipeOverviewIngredientsList = document.querySelector(
@@ -331,7 +335,7 @@ yourRecipeOverviewDeleteButton.addEventListener("click", () => {
     if (dishes.dishes.length == 1) {
       dbRemove(ref(database, "users/" + userID + "/dishes/dishes"));
       disappearing(yourRecipesOverview);
-      appearing(yourRecipesBrowser);
+      appearing(yourRecipeBrowserContent);
     } else {
       dbRemove(
         ref(
@@ -350,7 +354,7 @@ yourRecipeOverviewDeleteButton.addEventListener("click", () => {
           dishes: newDishesList,
         });
         disappearing(yourRecipesOverview);
-        appearing(yourRecipesBrowser);
+        appearing(yourRecipeBrowserContent);
       });
     }
     createdRecipes.splice(createdRecipes.indexOf(dishToDelete), 1);
@@ -360,7 +364,7 @@ yourRecipeOverviewDeleteButton.addEventListener("click", () => {
 });
 yourRecipeOverviewExitButton.addEventListener("click", () => {
   disappearing(yourRecipesOverview);
-  appearing(yourRecipesBrowser);
+  appearing(yourRecipeBrowserContent);
 });
 
 const recipeOverviewAppearing = function () {
@@ -467,7 +471,7 @@ const recipeOverviewAppearing = function () {
     }
   };
   yourRecipesShareImage.addEventListener("click", sharingRecipe);
-  disappearing(yourRecipesBrowser);
+  disappearing(yourRecipeBrowserContent);
   appearing(yourRecipesOverview);
   dishToDelete = this;
   yourRecipeOverviewTagImage.forEach((element) => {
@@ -508,7 +512,6 @@ const recipeOverviewAppearing = function () {
   dishes.dishes[createdRecipes.indexOf(this)].recipeTags.forEach(
     yourRecipeTagsDisplay
   );
-  // console.log(yourRecipesOverviewPhotoDisplay.src);
   yourRecipesOverviewPhotoDisplay.src =
     dishes.dishes[createdRecipes.indexOf(this)].recipePhotoSrc;
 };
@@ -786,7 +789,7 @@ const clearNewDish = () => {
       overviewTagImage[index].style.display = "none";
     }
   };
-  disappearing(newDish);
+  disappearing(newDishContainer);
   appearing(mainMenu);
   dishName = "";
   dishIngredients = "";
@@ -856,7 +859,6 @@ const ingredientsDisplay = function (element, index) {
   deleteButtons.forEach(deleteButtonFunction);
 };
 const deleteIngredient = function () {
-  console.log(this);
   const deleteIndex = deleteButtons.indexOf(this);
   ingredients.splice(deleteIndex, 1);
   ingredientsUpdate();
@@ -905,8 +907,6 @@ ingredientSubmit.addEventListener("click", () => {
     ingredientNameInput.style.boxShadow = "none";
     ingredientQuantityInput.style.boxShadow = "red 1px 1px 5px";
   } else if (!ingredientTypeCheck) {
-    console.log(ingredientTypeCheck);
-
     ingredientQuantityInput.style.boxShadow = "none";
     ingredientNameInput.style.boxShadow = "none";
     ingredientTypeName.forEach(ingredientTypeMarkNotChecked);
@@ -1049,9 +1049,18 @@ photoSubmitButton.addEventListener("click", () => {
 });
 //overview
 const overviewSubmitDisplay = () => {
+  let sameName = false;
+  dishes.dishes.forEach((e) => {
+    if (e.recipeName == dishName) {
+      sameName = true;
+    }
+  });
   dishReminder.style.display = "flex";
   if (!dishName) {
     dishReminder.textContent = "Please add dish name";
+    dishSubmitButton.style.display = "none";
+  } else if (sameName == true) {
+    dishReminder.textContent = "You cannot create 2 recipes with the same name";
     dishSubmitButton.style.display = "none";
   } else if (ingredients.length < 1) {
     dishReminder.textContent = "Please add ingredients";
@@ -1136,6 +1145,7 @@ const browserContent = document.querySelector("div.browserContent");
 const browserOverview = document.querySelector("div.browserOverview");
 const creatorPhotoImage = document.querySelector("img.creatorPhotoImage");
 const creatorUsername = document.querySelector("div.creatorUsername");
+const browserContainer = document.querySelector("div.browserContainer");
 const browserOverviewTagImage = Array.from(
   document.querySelectorAll("img.browserOverviewTagImage")
 );
@@ -1156,14 +1166,14 @@ const browserOverviewExitButton = document.querySelector(
 );
 browserOverviewExitButton.addEventListener("click", () => {
   disappearing(browserOverview);
-  appearing(browserContent);
+  appearing(browserContainer);
 });
 browserExitButton.addEventListener("click", () => {
   disappearing(browser);
   appearing(mainMenu);
 });
 const browserOverviewAppearing = function () {
-  disappearing(browserContent);
+  disappearing(browserContainer);
   appearing(browserOverview);
   creatorPhotoImage.src = uploadedDishes[uploadedRecipes.indexOf(this)][3];
   creatorUsername.textContent =
@@ -1171,11 +1181,6 @@ const browserOverviewAppearing = function () {
   browserOverviewTagImage.forEach((element) => {
     element.style.display = "none";
   });
-  console.log(this);
-  console.log(uploadedRecipes);
-  console.log(uploadedRecipes.indexOf(this));
-  console.log(uploadedDishes[uploadedRecipes.indexOf(this)][0]);
-  console.log(uploadedDishes[uploadedRecipes.indexOf(this)][0].recipeName);
   browserOverviewDishName.textContent = capitalizeFirstLetter(
     uploadedDishes[uploadedRecipes.indexOf(this)][0].recipeName
   );
@@ -1223,7 +1228,6 @@ const uploadedRecipesDisplay = () => {
       });
       uploadedRecipes.splice(0, uploadedRecipes.length);
       if (typeof uploadedDishes !== "undefined") {
-        console.log(uploadedDishes);
         uploadedDishes.forEach((element) => {
           const newUploadedRecipe = document.createElement("div");
           newUploadedRecipe.classList.toggle("browserRecipe");
@@ -1285,18 +1289,14 @@ async function imageUpload() {
     uploadBytesResumable(storageRef, file, metaData).then(
       getDownloadURL(storageRef).then((downloadURL) => {
         const interval = setInterval(() => {
-          console.log(intervalCounter);
-          console.log(typeof downloadURL);
           if (intervalCounter < 6) {
             if (typeof downloadURL == "string") {
               alertAnimation(photoChangedAlert);
-              console.log("exists");
               update(ref(database, "users/" + userID, userID), {
                 photoURL: downloadURL,
               });
               intervalCounter = 6;
             } else {
-              console.log(" not exists");
               intervalCounter++;
             }
           } else {
